@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:theme="@style/Theme.Music.Font">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/cover"
+        android:src="@drawable/image_as_cover"
+        app:shapeAppearance="@style/roundedImageView" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/medium"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:maxEms="15"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@string/love_is_gone_by_slander_forever_on_love"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/albumName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:fontFamily="@font/medium"
+            android:maxEms="10"
+            android:maxLines="1"
+            android:text="@string/albumName"
+            android:textSize="12sp"
+            android:theme="@style/Theme.Music.FontColor" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/medium"
+        android:gravity="end"
+        android:maxLines="1"
+        android:paddingTop="10dp"
+        android:text="@string/duration"
+        android:textSize="11sp" />
+
+</LinearLayout>
