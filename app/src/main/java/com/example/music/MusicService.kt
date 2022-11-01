@@ -81,7 +81,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             BitmapFactory.decodeResource(resources, R.drawable.image_as_cover)
         }
 
-
         val notification = NotificationCompat.Builder(baseContext, ApplicationClass.CHANNEL_ID)
             .setContentTitle(MusicInterface.musicList[MusicInterface.songPosition].title)
             .setContentText(MusicInterface.musicList[MusicInterface.songPosition].artist)
@@ -92,7 +91,6 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                     .setMediaSession(mediaSession.sessionToken)
                     .setShowActionsInCompactView(0, 1, 2)
             ).setPriority(NotificationCompat.PRIORITY_HIGH)
-
             .setSilent(true)
             .setContentIntent(contentIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setOnlyAlertOnce(true)
@@ -188,18 +186,20 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
     }
 
-    override fun onAudioFocusChange(mediaFocus: Int) {
-        if (mediaFocus <= 0) {
-            MusicInterface.binding.interfacePlay.setImageResource((R.drawable.play))
+    override fun onAudioFocusChange(focusChange: Int) {
+        if (focusChange <= 0) {
+            //pause music
+            MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play_notification)
             MusicInterface.isPlaying = false
             mediaPlayer!!.pause()
             showNotification(R.drawable.play_notification)
+
         } else {
-            MusicInterface.binding.interfacePlay.setImageResource((R.drawable.pause))
+            //play music
+            MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause_notification)
             MusicInterface.isPlaying = true
             mediaPlayer!!.start()
             showNotification(R.drawable.pause_notification)
-
         }
     }
 }

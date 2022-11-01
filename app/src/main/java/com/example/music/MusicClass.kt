@@ -30,7 +30,7 @@ fun getImageArt(path: String): ByteArray? {
 
 fun exitApplication() {
     if (MusicInterface.musicService != null) {
-        //MusicInterface.musicService!!.audioManager.abandonAudioFocus(MusicInterface.musicService)
+        MusicInterface.musicService!!.audioManager.abandonAudioFocus(MusicInterface.musicService)
         MusicInterface.musicService!!.stopForeground(true)
         MusicInterface.musicService!!.mediaPlayer!!.release()
         MusicInterface.musicService = null

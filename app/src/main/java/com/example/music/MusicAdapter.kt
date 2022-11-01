@@ -2,51 +2,57 @@ package com.example.music
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.music.databinding.SingleLayoutBinding
 
 class MusicAdapter(private val context: Context, private var musicList: ArrayList<MusicClass>) :
-    RecyclerView.Adapter<MusicAdapter.ViewHolder>() {
+    RecyclerView.Adapter<MusicAdapter.MyHolder>() {
 
-
-    class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val titleView: TextView = itemView.findViewById(R.id.titleView)
-        val duration: TextView = itemView.findViewById(R.id.duration)
-        val albumName: TextView = itemView.findViewById(R.id.albumName)
-
+    class MyHolder(binding: SingleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+        val titleView = binding.titleView
+        val albumName = binding.albumName
+        val imageView = binding.imageView
+        val duration = binding.duration
+        val root = binding.root
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.single_layout, parent, false)
 
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
+        return MyHolder(
+            SingleLayoutBinding.inflate(
+                LayoutInflater.from(
+                    context
+                ), parent, false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.titleView.text = musicList[position].title
-        holder.albumName.text = musicList[position].album
-        holder.duration.text = formatDuration(musicList[position].length)
-        Glide
-            .with(context)
-            .load(musicList[position].artUri)
-            .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
-            .into(holder.imageView)
-        holder.itemView.setOnClickListener {
-            if (MainActivity.isSearching)
-                sendIntent(position = position, parameter = "MusicAdapterSearch")
-            else
-                sendIntent(position = position, parameter = "MusicAdapter")
+    override fun onBindViewHolder(holder: MyHolder, position: Int) {
+        try {
+
+            holder.titleView.text = musicList[position].title
+            holder.albumName.text = musicList[position].album
+            holder.duration.text = formatDuration(musicList[position].length)
+            Glide
+                .with(context)
+                .load(musicList[position].artUri)
+                .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
+                .into(holder.imageView)
+            holder.itemView.setOnClickListener {
+                if (MainActivity.isSearching)
+                    sendIntent(position = position, parameter = "MusicAdapterSearch")
+                else
+                    sendIntent(position = position, parameter = "MusicAdapter")
+            }
+        } catch (e: Exception) {
+            Log.e("AdapterView", e.toString())
         }
-
     }
 
     override fun getItemCount(): Int {

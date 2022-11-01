@@ -3,6 +3,7 @@ package com.example.music
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -40,18 +41,23 @@ class BroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun prevNextMusic(increment: Boolean, context: Context) {
-        setSongPosition(increment = increment)
-        MusicInterface.musicService!!.initSong()
-        Glide.with(context).load(MusicInterface.musicList[MusicInterface.songPosition].artUri)
-            .apply(
-                RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
-            ).into(MusicInterface.binding.interfaceCover)
+        try {
 
-        MusicInterface.binding.interfaceSongName.text =
-            MusicInterface.musicList[MusicInterface.songPosition].title
-        MusicInterface.binding.interfaceArtistName.text =
-            MusicInterface.musicList[MusicInterface.songPosition].album
-        playMusic()
+            setSongPosition(increment = increment)
+            MusicInterface.musicService!!.initSong()
+            Glide.with(context).load(MusicInterface.musicList[MusicInterface.songPosition].artUri)
+                .apply(
+                    RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
+                ).into(MusicInterface.binding.interfaceCover)
+
+            MusicInterface.binding.interfaceSongName.text =
+                MusicInterface.musicList[MusicInterface.songPosition].title
+            MusicInterface.binding.interfaceArtistName.text =
+                MusicInterface.musicList[MusicInterface.songPosition].album
+            playMusic()
+        } catch (e: Exception) {
+            Log.e("AdapterView", e.toString())
+        }
     }
 
     private fun pauseMusic() {

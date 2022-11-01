@@ -2,6 +2,7 @@ package com.example.music
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.media.AudioManager
@@ -38,7 +39,13 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         super.onCreate(savedInstanceState)
         binding = ActivityMusicInterfaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
         initActivity()
+
+
+
         binding.backButton.setOnClickListener {
             finish()
         }
@@ -61,9 +68,14 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
         binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, isUser: Boolean) {
-                if (isUser) {
-                    musicService!!.mediaPlayer!!.seekTo(progress)
-                    musicService!!.showNotification(if(isPlaying) R.drawable.pause_notification else R.drawable.play_notification)
+                try {
+
+                    if (isUser) {
+                        musicService!!.mediaPlayer!!.seekTo(progress)
+                        musicService!!.showNotification(if (isPlaying) R.drawable.pause_notification else R.drawable.play_notification)
+                    }
+                } catch (e: Exception) {
+                    return
                 }
             }
 
@@ -84,7 +96,6 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
         binding.interfaceEqualizer.setOnClickListener {
             try {
-
                 val eqIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
                 eqIntent.putExtra(
                     AudioEffect.EXTRA_AUDIO_SESSION, musicService!!.mediaPlayer!!.audioSessionId
@@ -118,27 +129,31 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 musicList = ArrayList()
                 musicList.addAll(MainActivity.songList)
                 setLayout()
+                initSong()
             }
 
             "MusicAdapterSearch" -> {
                 musicList = ArrayList()
                 musicList.addAll(MainActivity.filteredList)
                 setLayout()
+                initSong()
             }
         }
-        if (musicService != null && !isPlaying) playMusic()
     }
 
     private fun setLayout() {
+        try {
 
-        Glide.with(this).load(musicList[songPosition].artUri).apply(
-            RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
-        ).into(binding.interfaceCover)
+            Glide.with(this).load(musicList[songPosition].artUri).apply(
+                RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
+            ).into(binding.interfaceCover)
 
-        binding.interfaceSongName.text = musicList[songPosition].title
-        binding.interfaceArtistName.text = musicList[songPosition].album
-        if (isrepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
-
+            binding.interfaceSongName.text = musicList[songPosition].title
+            binding.interfaceArtistName.text = musicList[songPosition].album
+            if (isrepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
+        } catch (e: Exception) {
+            return
+        }
     }
 
     private fun initSong() {
@@ -160,6 +175,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         } catch (e: Exception) {
             return
         }
+
     }
 
     private fun playMusic() {
@@ -175,45 +191,43 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun pauseMusic() {
         try {
-
             isPlaying = false
             musicService!!.mediaPlayer!!.pause()
-            musicService!!.showNotification(R.drawable.play_notification)
             binding.interfacePlay.setImageResource((R.drawable.play))
+            musicService!!.showNotification(R.drawable.play_notification)
         } catch (e: Exception) {
             return
         }
-
     }
 
     private fun prevNextSong(increment: Boolean) {
-        if (increment) {
-            setSongPosition(increment = true)
-            setLayout()
-            initSong()
-        } else {
-            setSongPosition(increment = false)
-            setLayout()
-            initSong()
+        try {
+            if (increment) {
+                setSongPosition(increment = true)
+                setLayout()
+                initSong()
+            } else {
+                setSongPosition(increment = false)
+                setLayout()
+                initSong()
+            }
+        } catch (e: Exception) {
+            return
         }
-
-
     }
 
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-        if (musicService == null) {
-            val binder = service as MusicService.MyBinder
-            musicService = binder.currentService()
-            musicService!!.audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-            musicService!!.audioManager.requestAudioFocus(
-                musicService,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
-            )
-        }
+        val binder = service as MusicService.MyBinder
+        musicService = binder.currentService()
         initSong()
         musicService!!.seekBarHandler()
+        musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        musicService!!.audioManager.requestAudioFocus(
+            musicService,
+            AudioManager.STREAM_MUSIC,
+            AudioManager.AUDIOFOCUS_GAIN
+        )
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
