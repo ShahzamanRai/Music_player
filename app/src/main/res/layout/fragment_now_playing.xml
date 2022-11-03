@@ -1,10 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@color/mediumBlue"
-    tools:context=".NowPlaying">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragmentBG"
+        android:orientation="vertical"
+        android:theme="@style/Theme.Music.Font.fragment"
+        tools:context=".NowPlaying">
 
-</RelativeLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/fragmentImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/cover"
+            android:src="@drawable/image_as_cover"
+            app:shapeAppearance="@style/roundedImageView" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/fragmentHeartButton"
+            android:layout_toEndOf="@+id/fragmentImage"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fragmentTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:ellipsize="marquee"
+                android:fontFamily="@font/medium"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/SongTitle"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/fragmentAlbumName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:fontFamily="@font/medium"
+                android:maxLines="1"
+                android:text="@string/albumName"
+                android:textColor="#CCD3D5DD"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/fragmentHeartButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/fragmentButton"
+            android:contentDescription="@string/cover"
+            android:src="@drawable/heart_fragment" />
+
+        <ImageButton
+            android:id="@+id/fragmentButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/cover"
+            android:src="@drawable/play_now" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -37,7 +37,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
         val intent = Intent(baseContext, MusicInterface::class.java)
         intent.putExtra("index", MusicInterface.songPosition)
-        intent.putExtra("class", "Now Playing")
+        intent.putExtra("class", "Now Playing Notification")
+
         val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_IMMUTABLE
         } else {
@@ -73,6 +74,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             baseContext, 3, exitIntent, PendingIntent.FLAG_UPDATE_CURRENT
 
         )
+
 
         val imageArt = getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path)
         val image = if (imageArt != null) {
@@ -126,12 +128,15 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                         MusicInterface.isPlaying = false
                         mediaPlayer!!.pause()
                         showNotification(R.drawable.play_notification)
+                        NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
                     } else {
                         //play music
                         MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
                         MusicInterface.isPlaying = true
                         mediaPlayer!!.start()
                         showNotification(R.drawable.pause_notification)
+                        NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
+
                     }
                     return super.onMediaButtonEvent(mediaButtonEvent)
                 }
@@ -189,8 +194,9 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     override fun onAudioFocusChange(focusChange: Int) {
         if (focusChange <= 0) {
             //pause music
-            MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play_notification)
+            MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
             MusicInterface.isPlaying = false
+            NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
             mediaPlayer!!.pause()
             showNotification(R.drawable.play_notification)
 
@@ -199,6 +205,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause_notification)
             MusicInterface.isPlaying = true
             mediaPlayer!!.start()
+            NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
             showNotification(R.drawable.pause_notification)
         }
     }

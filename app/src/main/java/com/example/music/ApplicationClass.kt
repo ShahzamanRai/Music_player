@@ -12,6 +12,7 @@ class ApplicationClass : Application() {
         const val PREVIOUS = "previous"
         const val PLAY = "play"
         const val EXIT = "exit"
+        const val SHUFFLE = "shuffle"
     }
 
     override fun onCreate() {

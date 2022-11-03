@@ -41,7 +41,7 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             holder.duration.text = formatDuration(musicList[position].length)
             Glide
                 .with(context)
-                .load(musicList[position].artUri)
+                .load(getImageArt(musicList[position].path))
                 .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
                 .into(holder.imageView)
             holder.itemView.setOnClickListener {

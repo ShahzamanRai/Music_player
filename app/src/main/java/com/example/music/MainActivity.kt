@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         songList = getAudio()
         recyclerView = binding.listView
         recyclerView.adapter = MusicAdapter(this, songList)
-        recyclerView.setItemViewCacheSize(15)
+        recyclerView.setItemViewCacheSize(50)
         recyclerView.hasFixedSize()
         recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
     }

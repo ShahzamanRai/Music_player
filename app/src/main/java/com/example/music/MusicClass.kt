@@ -39,15 +39,27 @@ fun exitApplication() {
 }
 
 fun setSongPosition(increment: Boolean) {
-    if (!MusicInterface.isrepeating) {
-        if (increment) {
-            if (MusicInterface.musicList.size - 1 == MusicInterface.songPosition) {
-                MusicInterface.songPosition = 0
-            } else ++MusicInterface.songPosition
+    if (!MusicInterface.isRepeating) {
+        if (!MusicInterface.isShuffling) {
+            if (increment) {
+                if (MusicInterface.musicList.size - 1 == MusicInterface.songPosition) {
+                    MusicInterface.songPosition = 0
+                } else ++MusicInterface.songPosition
+            } else {
+                if (0 == MusicInterface.songPosition) MusicInterface.songPosition =
+                    MusicInterface.musicList.size - 1
+                else --MusicInterface.songPosition
+            }
         } else {
-            if (0 == MusicInterface.songPosition) MusicInterface.songPosition =
-                MusicInterface.musicList.size - 1
-            else --MusicInterface.songPosition
+            shuffleSongs()
         }
     }
+}
+
+fun shuffleSongs() {
+    var newSong: Int = MusicInterface.songPosition
+    while (newSong == MusicInterface.songPosition) {
+        newSong = kotlin.random.Random.nextInt(MusicInterface.musicList.size);
+    }
+    MusicInterface.songPosition = newSong;
 }

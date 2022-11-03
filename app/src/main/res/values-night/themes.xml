@@ -17,6 +17,7 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+
     <style name="Theme.Music.Splash">
         <item name="background">@color/blue</item>
         <item name="android:statusBarColor">@color/blue</item>

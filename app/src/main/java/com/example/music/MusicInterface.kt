@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
@@ -12,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.MediaStore
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -27,7 +29,9 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         lateinit var musicList: ArrayList<MusicClass>
         var songPosition: Int = 0
         var isPlaying: Boolean = false
-        var isrepeating: Boolean = false
+        var isRepeating: Boolean = false
+        var isShuffling: Boolean = false
+        var liked: Boolean = false
 
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityMusicInterfaceBinding
@@ -39,12 +43,22 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         super.onCreate(savedInstanceState)
         binding = ActivityMusicInterfaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val intent = Intent(this, MusicService::class.java)
-        bindService(intent, this, BIND_AUTO_CREATE)
-        startService(intent)
-        initActivity()
-
-
+        binding.interfaceSongName.isSelected = true
+        if (intent.data?.scheme.contentEquals("content")) {
+            val intentService = Intent(this, MusicService::class.java)
+            bindService(intentService, this, BIND_AUTO_CREATE)
+            startService(intentService)
+            musicList = ArrayList()
+            musicList.add(getMusicDetails(intent.data!!))
+            Glide.with(this).load(getImageArt(musicList[songPosition].path)).apply(
+                RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
+            ).into(binding.interfaceCover)
+            binding.interfaceSongName.text =
+                musicList[songPosition].title.removePrefix("/storage/emulated/0/")
+            binding.interfaceArtistName.text = musicList[songPosition].album
+        } else {
+            initActivity()
+        }
 
         binding.backButton.setOnClickListener {
             finish()
@@ -91,9 +105,17 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
 
         binding.interfaceLikeButton.setOnClickListener {
-            binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
-        }
+            if (liked) {
+                liked = false
+                binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fragment)
+            } else {
+                liked = true
+                binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
+            }
 
+        }
         binding.interfaceEqualizer.setOnClickListener {
             try {
                 val eqIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
@@ -107,32 +129,52 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 val toast = Toast.makeText(
                     this, "Equalizer feature not supported in your device", Toast.LENGTH_SHORT
                 )
-                toast.getView()?.setBackgroundColor(getColor(R.color.blue));
                 toast.show()
             }
         }
+
         binding.interfaceRepeat.setOnClickListener {
-            if (!isrepeating) {
-                isrepeating = true
+            if (!isRepeating) {
+                isRepeating = true
                 binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
             } else {
-                isrepeating = false
+                isRepeating = false
                 binding.interfaceRepeat.setImageResource(R.drawable.repeat)
             }
         }
+
+        binding.interfaceShuffle.setOnClickListener {
+            if (!isShuffling) {
+                isShuffling = true
+                binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
+            } else {
+                isShuffling = false
+                binding.interfaceShuffle.setImageResource(R.drawable.shuffle)
+            }
+        }
+
+
     }
 
     private fun initActivity() {
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
             "MusicAdapter" -> {
+                startService()
                 musicList = ArrayList()
                 musicList.addAll(MainActivity.songList)
                 setLayout()
                 initSong()
             }
+            "Now playing" -> {
+                showMusicInterfacePlaying()
+            }
+            "Now Playing Notification" -> {
+                showMusicInterfacePlaying()
+            }
 
             "MusicAdapterSearch" -> {
+                startService()
                 musicList = ArrayList()
                 musicList.addAll(MainActivity.filteredList)
                 setLayout()
@@ -143,14 +185,14 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun setLayout() {
         try {
-
-            Glide.with(this).load(musicList[songPosition].artUri).apply(
+            Glide.with(this).load(getImageArt(musicList[songPosition].path)).apply(
                 RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
             ).into(binding.interfaceCover)
 
             binding.interfaceSongName.text = musicList[songPosition].title
             binding.interfaceArtistName.text = musicList[songPosition].album
-            if (isrepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
+            if (isRepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
+            if (isShuffling) binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
         } catch (e: Exception) {
             return
         }
@@ -201,33 +243,30 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     }
 
     private fun prevNextSong(increment: Boolean) {
-        try {
-            if (increment) {
-                setSongPosition(increment = true)
-                setLayout()
-                initSong()
-            } else {
-                setSongPosition(increment = false)
-                setLayout()
-                initSong()
-            }
-        } catch (e: Exception) {
-            return
+        if (increment) {
+            setSongPosition(increment = true)
+            setLayout()
+            initSong()
+        } else {
+            setSongPosition(increment = false)
+            setLayout()
+            initSong()
         }
+
     }
 
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-        val binder = service as MusicService.MyBinder
-        musicService = binder.currentService()
+        if (musicService == null) {
+            val binder = service as MusicService.MyBinder
+            musicService = binder.currentService()
+            musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            musicService!!.audioManager.requestAudioFocus(
+                musicService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+            )
+        }
         initSong()
         musicService!!.seekBarHandler()
-        musicService!!.audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        musicService!!.audioManager.requestAudioFocus(
-            musicService,
-            AudioManager.STREAM_MUSIC,
-            AudioManager.AUDIOFOCUS_GAIN
-        )
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
@@ -239,6 +278,15 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         initSong()
         setLayout()
 
+        //for refreshing now playing image & text on song completion
+        NowPlaying.binding.fragmentTitle.isSelected = true
+        Glide.with(applicationContext)
+            .load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
+            .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
+            .into(NowPlaying.binding.fragmentImage)
+        NowPlaying.binding.fragmentTitle.text = musicList[songPosition].title
+        NowPlaying.binding.fragmentAlbumName.text = musicList[songPosition].title
+
     }
 
     @Deprecated("Deprecated in Java")
@@ -249,8 +297,59 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun getMusicDetails(contentUri: Uri): MusicClass {
+        var cursor: Cursor? = null
+        try {
+            val projection = arrayOf(MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DURATION)
+            cursor = this.contentResolver.query(contentUri, projection, null, null, null)
+            val dataColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val durationColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            cursor!!.moveToFirst()
+            val path = dataColumn?.let { cursor.getString(it) }
+            val duration = durationColumn?.let { cursor.getLong(it) }!!
+            return MusicClass(
+                id = "Unknown",
+                title = path.toString(),
+                album = "Unknown",
+                artist = "Unknown",
+                length = duration,
+                artUri = "Unknown",
+                path = path.toString()
+            )
+        } finally {
+            cursor?.close()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (musicList[songPosition].id == "Unknown" && !isPlaying) exitApplication()
+    }
+
+    private fun startService() {
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
+    }
+
+    private fun showMusicInterfacePlaying() {
+        setLayout()
+        binding.interfaceSeekStart.text =
+            formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+        binding.interfaceSeekEnd.text =
+            formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+        binding.seekbar.progress = musicService!!.mediaPlayer!!.currentPosition
+        binding.seekbar.max = musicService!!.mediaPlayer!!.duration
+        if (isPlaying) {
+            binding.interfacePlay.setImageResource((R.drawable.pause))
+        } else {
+            binding.interfacePlay.setImageResource((R.drawable.play))
+        }
+        if (liked) {
+            binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
+        } else {
+            binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+        }
     }
 }

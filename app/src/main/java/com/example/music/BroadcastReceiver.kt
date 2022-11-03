@@ -17,6 +17,7 @@ class BroadcastReceiver : BroadcastReceiver() {
             ApplicationClass.PLAY -> {
                 if (MusicInterface.isPlaying) pauseMusic() else playMusic()
             }
+
             ApplicationClass.NEXT -> {
                 prevNextMusic(increment = true, context = context!!)
             }
@@ -31,21 +32,15 @@ class BroadcastReceiver : BroadcastReceiver() {
         MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
         MusicInterface.musicService!!.mediaPlayer!!.start()
         MusicInterface.musicService!!.showNotification(R.drawable.pause_notification)
-        MusicInterface.binding.interfaceSeekStart.text =
-            formatDuration(MusicInterface.musicService!!.mediaPlayer!!.currentPosition.toLong())
-        MusicInterface.binding.interfaceSeekEnd.text =
-            formatDuration(MusicInterface.musicService!!.mediaPlayer!!.duration.toLong())
-        MusicInterface.binding.seekbar.progress = 0
-        MusicInterface.binding.seekbar.max = MusicInterface.musicService!!.mediaPlayer!!.duration
+        NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
 
     }
 
     private fun prevNextMusic(increment: Boolean, context: Context) {
         try {
-
             setSongPosition(increment = increment)
             MusicInterface.musicService!!.initSong()
-            Glide.with(context).load(MusicInterface.musicList[MusicInterface.songPosition].artUri)
+            Glide.with(context).load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
                 .apply(
                     RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
                 ).into(MusicInterface.binding.interfaceCover)
@@ -53,6 +48,15 @@ class BroadcastReceiver : BroadcastReceiver() {
             MusicInterface.binding.interfaceSongName.text =
                 MusicInterface.musicList[MusicInterface.songPosition].title
             MusicInterface.binding.interfaceArtistName.text =
+                MusicInterface.musicList[MusicInterface.songPosition].album
+            Glide.with(context)
+                .load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
+                .apply(
+                    RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
+                ).into(NowPlaying.binding.fragmentImage)
+            NowPlaying.binding.fragmentTitle.text =
+                MusicInterface.musicList[MusicInterface.songPosition].title
+            NowPlaying.binding.fragmentAlbumName.text =
                 MusicInterface.musicList[MusicInterface.songPosition].album
             playMusic()
         } catch (e: Exception) {
@@ -65,6 +69,7 @@ class BroadcastReceiver : BroadcastReceiver() {
         MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
         MusicInterface.musicService!!.mediaPlayer!!.pause()
         MusicInterface.musicService!!.showNotification(R.drawable.play_notification)
+        NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
 
     }
 }
