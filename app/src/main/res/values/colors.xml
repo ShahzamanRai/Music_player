@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#FF000000</color>
+    <color name="black">#121212</color>
     <color name="white">#DADBE1</color>
     <color name="topWhite">#D0CCCC</color>
-    <color name="centerWhite">#EEE7E7</color>
-    <color name="endWhite">#F5F5F5</color>
     <color name="blue">#0b0b0b</color>
-    <color name="mediumBlue">#202847</color>
-    <color name="lightBlue">#CC333B5A</color>
     <color name="green">#1ed760</color>
+    <color name="lightBlue">#CC333B5A</color>
     <color name="fragmentBG">#444444</color>
+    <color name="darkGrey">#2A2A2A</color>
+    <color name="bgPlay">#F2E7D5</color>
 
 </resources>

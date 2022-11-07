@@ -1,6 +1,7 @@
 package com.example.music
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,8 @@ import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
+    lateinit var musicAdapter: MusicAdapter
+
     companion object {
         lateinit var songList: ArrayList<MusicClass>
         lateinit var recyclerView: RecyclerView
@@ -24,6 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityMainBinding
+        var sortOrder: Int = 0
+        val sortingList = arrayOf(
+            MediaStore.Audio.Media.DATE_ADDED + "DESC",
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.SIZE + "DESC"
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +42,28 @@ class MainActivity : AppCompatActivity() {
 
         if (requestRuntimePermission()) init()
 
-
+        binding.likedSongs.root.setOnClickListener {
+            val intent = Intent(baseContext, FavouriteActivity::class.java)
+            startActivity(intent)
+        }
+/*
+        binding.sort.setOnClickListener {
+            val menuList = arrayOf("Date Added", "Title", "Size")
+            var currentSort = sortOrder
+            val builder = MaterialAlertDialogBuilder(this)
+            builder.setTitle("Sorting")
+                .setPositiveButton("OK") { _, _ ->
+                    val editor = getSharedPreferences("SORTING", MODE_PRIVATE).edit()
+                    editor.putInt("sortOrder", currentSort)
+                    editor.apply()
+                }
+                .setSingleChoiceItems(menuList, currentSort) { _, which ->
+                    currentSort = which
+                }
+            val customDialog = builder.create()
+            customDialog.show()
+        }
+*/
         binding.searchView.clearFocus()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -71,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             projection,
             selection,
             null,
-            MediaStore.Audio.Media.DATE_ADDED + " DESC",
+            MediaStore.Audio.Media.DATE_ADDED,
             null
         )
 
@@ -173,4 +203,17 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+    /*
+    override fun onResume() {
+        super.onResume()
+        //for sorting
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        val sortValue = sortEditor.getInt("sortOrder", 0)
+        if (sortOrder != sortValue) {
+            sortOrder = sortValue
+            songList = getAudio()
+            musicAdapter.updateMusicList(songList)
+        }
+    }
+    */
 }

@@ -28,21 +28,65 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginHorizontal="10dp"
+            app:defaultQueryHint="Search music"
+            app:searchHintIcon="@null"
             app:searchIcon="@drawable/search_icon" />
+
+        <ImageView
+            android:id="@+id/sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="10dp"
+            android:contentDescription="@string/sort"
+            android:src="@drawable/sort" />
+
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/layoutPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingHorizontal="15dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@id/listView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <include
+            android:id="@+id/likedSongs"
+            layout="@layout/liked_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1" />
+
+        <include
+            android:id="@+id/playlistView"
+            layout="@layout/playlist_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         android:scrollbarThumbVertical="@drawable/scroll_bar"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/nowPlaying"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-    
+        app:layout_constraintTop_toBottomOf="@+id/layoutPlaylist"
+        app:spanCount="1" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nowPlaying"
         android:name="com.example.music.NowPlaying"

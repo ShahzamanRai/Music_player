@@ -63,3 +63,14 @@ fun shuffleSongs() {
     }
     MusicInterface.songPosition = newSong;
 }
+
+fun favouriteCheck(id: String): Int {
+    MusicInterface.isLiked = false
+    FavouriteActivity.favSongList.forEachIndexed { index, music ->
+        if (id == music.id) {
+            MusicInterface.isLiked = true
+            return index
+        }
+    }
+    return -1
+}

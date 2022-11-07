@@ -27,14 +27,16 @@ class NowPlaying : Fragment() {
         binding.root.visibility = View.GONE
 
         binding.fragmentHeartButton.setOnClickListener {
-            if (MusicInterface.liked) {
-                MusicInterface.liked = false
+            if (MusicInterface.isLiked) {
+                MusicInterface.isLiked = false
                 MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart)
                 binding.fragmentHeartButton.setImageResource(R.drawable.heart_fragment)
+                FavouriteActivity.favSongList.removeAt(MusicInterface.fIndex)
             } else {
-                MusicInterface.liked = true
+                MusicInterface.isLiked = true
                 MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
                 binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
+                FavouriteActivity.favSongList.add(MusicInterface.musicList[MusicInterface.songPosition])
             }
         }
 

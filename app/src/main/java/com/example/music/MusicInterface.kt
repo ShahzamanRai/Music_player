@@ -31,7 +31,8 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var isPlaying: Boolean = false
         var isRepeating: Boolean = false
         var isShuffling: Boolean = false
-        var liked: Boolean = false
+        var fIndex: Int = -1
+        var isLiked: Boolean = false
 
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityMusicInterfaceBinding
@@ -39,6 +40,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicInterfaceBinding.inflate(layoutInflater)
@@ -105,14 +107,16 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
 
         binding.interfaceLikeButton.setOnClickListener {
-            if (liked) {
-                liked = false
+            if (isLiked) {
+                isLiked = false
                 binding.interfaceLikeButton.setImageResource(R.drawable.heart)
                 NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fragment)
+                FavouriteActivity.favSongList.removeAt(fIndex)
             } else {
-                liked = true
+                isLiked = true
                 binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
                 NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
+                FavouriteActivity.favSongList.add(musicList[songPosition])
             }
 
         }
@@ -132,6 +136,17 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 toast.show()
             }
         }
+
+        binding.interfaceCover.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
+
+            override fun onSwipeLeft() {
+                prevNextSong(increment = true)
+            }
+
+            override fun onSwipeRight() {
+                prevNextSong(increment = false)
+            }
+        })
 
         binding.interfaceRepeat.setOnClickListener {
             if (!isRepeating) {
@@ -185,6 +200,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun setLayout() {
         try {
+            fIndex = favouriteCheck(musicList[songPosition].id)
             Glide.with(this).load(getImageArt(musicList[songPosition].path)).apply(
                 RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
             ).into(binding.interfaceCover)
@@ -193,6 +209,8 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.interfaceArtistName.text = musicList[songPosition].album
             if (isRepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
             if (isShuffling) binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
+            if (isLiked) binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+            else binding.interfaceLikeButton.setImageResource(R.drawable.heart)
         } catch (e: Exception) {
             return
         }
@@ -346,7 +364,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         } else {
             binding.interfacePlay.setImageResource((R.drawable.play))
         }
-        if (liked) {
+        if (isLiked) {
             binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
         } else {
             binding.interfaceLikeButton.setImageResource(R.drawable.heart)

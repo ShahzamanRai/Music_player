@@ -10,17 +10,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.SingleLayoutBinding
 
-class MusicAdapter(private val context: Context, private var musicList: ArrayList<MusicClass>) :
-    RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+class FavouriteAdapter(private val context: Context, private var musicList: ArrayList<MusicClass>) :
+    RecyclerView.Adapter<FavouriteAdapter.MyHolder>() {
 
     class MyHolder(binding: SingleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         val titleView = binding.titleView
         val albumName = binding.albumName
         val imageView = binding.imageView
         val duration = binding.duration
-        val root = binding.root
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -42,12 +40,6 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             .load(getImageArt(musicList[position].path))
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(holder.imageView)
-        holder.itemView.setOnClickListener {
-            if (MainActivity.isSearching)
-                sendIntent(position = position, parameter = "MusicAdapterSearch")
-            else
-                sendIntent(position = position, parameter = "MusicAdapter")
-        }
     }
 
 
@@ -60,11 +52,5 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         intent.putExtra("index", position)
         intent.putExtra("class", parameter)
         ContextCompat.startActivity(context, intent, null)
-    }
-
-    fun updateMusicList(searchList: ArrayList<MusicClass>) {
-        musicList = ArrayList()
-        musicList.addAll(searchList)
-        notifyDataSetChanged()
     }
 }
