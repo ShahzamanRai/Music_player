@@ -15,7 +15,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Music"
+        android:theme="@style/Theme.Music.Splash"
         tools:targetApi="31">
         <activity
             android:name=".FavouriteActivity"
@@ -24,22 +24,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".MusicInterface"
             android:exported="true">
+            
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -54,6 +43,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

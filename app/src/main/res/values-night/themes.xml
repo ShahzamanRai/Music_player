@@ -2,8 +2,9 @@
     <!-- Base application theme. -->
     <style name="Theme.Music" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/blue</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="font">@font/bold</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/white</item>
 
@@ -25,8 +26,8 @@
     </style>
 
 
-    <style name="Theme.Music.Splash">
-        <item name="background">@color/blue</item>
+    <style name="Theme.Music.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:statusBarColor">@color/blue</item>
     </style>
 

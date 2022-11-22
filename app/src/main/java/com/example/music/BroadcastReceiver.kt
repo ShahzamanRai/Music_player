@@ -36,11 +36,12 @@ class BroadcastReceiver : BroadcastReceiver() {
 
     }
 
-    private fun prevNextMusic(increment: Boolean, context: Context) {
+    fun prevNextMusic(increment: Boolean, context: Context) {
         try {
             setSongPosition(increment = increment)
             MusicInterface.musicService!!.initSong()
-            Glide.with(context).load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
+            Glide.with(context)
+                .load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
                 .apply(
                     RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop()
                 ).into(MusicInterface.binding.interfaceCover)
@@ -59,6 +60,15 @@ class BroadcastReceiver : BroadcastReceiver() {
             NowPlaying.binding.fragmentAlbumName.text =
                 MusicInterface.musicList[MusicInterface.songPosition].album
             playMusic()
+            MusicInterface.fIndex =
+                favouriteCheck(MusicInterface.musicList[MusicInterface.songPosition].id)
+            if (MusicInterface.isLiked) {
+                MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
+            } else {
+                MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
+            }
         } catch (e: Exception) {
             Log.e("AdapterView", e.toString())
         }

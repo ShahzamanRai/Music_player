@@ -19,6 +19,7 @@ class NowPlaying : Fragment() {
         lateinit var binding: FragmentNowPlayingBinding
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -27,6 +28,8 @@ class NowPlaying : Fragment() {
         binding.root.visibility = View.GONE
 
         binding.fragmentHeartButton.setOnClickListener {
+            MusicInterface.fIndex =
+                favouriteCheck(MusicInterface.musicList[MusicInterface.songPosition].id)
             if (MusicInterface.isLiked) {
                 MusicInterface.isLiked = false
                 MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart)

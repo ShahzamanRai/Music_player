@@ -1,6 +1,9 @@
 package com.example.music
 
+import android.content.Context
 import android.media.MediaMetadataRetriever
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.color.MaterialColors
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
@@ -74,3 +77,4 @@ fun favouriteCheck(id: String): Int {
     }
     return -1
 }
+

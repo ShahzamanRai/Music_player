@@ -18,6 +18,7 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
         val albumName = binding.albumName
         val imageView = binding.imageView
         val duration = binding.duration
+        val root = binding.root
     }
 
 
@@ -40,6 +41,12 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
             .load(getImageArt(musicList[position].path))
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(holder.imageView)
+        holder.root.setOnClickListener {
+            val intent = Intent(context, MusicInterface::class.java)
+            intent.putExtra("index", position)
+            intent.putExtra("class", "favouriteAdapter")
+            ContextCompat.startActivity(context, intent, null)
+        }
     }
 
 

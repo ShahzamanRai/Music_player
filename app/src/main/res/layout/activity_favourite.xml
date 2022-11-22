@@ -19,7 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:background="@null"
-            android:contentDescription="@string/like"
+            android:paddingHorizontal="10dp"
+            android:contentDescription="@string/albumName"
+            android:layout_marginStart="10dp"
             android:src="@drawable/back"
             tools:ignore="DuplicateSpeakableTextCheck" />
 

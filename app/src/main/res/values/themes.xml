@@ -38,8 +38,8 @@
         <item name="android:textColor">@color/lightBlue</item>
     </style>
 
-    <style name="Theme.Music.Splash">
-        <item name="background">@color/white</item>
+    <style name="Theme.Music.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:statusBarColor">@color/white</item>
     </style>
 

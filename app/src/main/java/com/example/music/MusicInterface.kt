@@ -44,6 +44,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicInterfaceBinding.inflate(layoutInflater)
+        setTheme(R.style.Theme_Music)
         setContentView(binding.root)
         binding.interfaceSongName.isSelected = true
         if (intent.data?.scheme.contentEquals("content")) {
@@ -107,6 +108,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
 
         binding.interfaceLikeButton.setOnClickListener {
+            fIndex = favouriteCheck(musicList[songPosition].id)
             if (isLiked) {
                 isLiked = false
                 binding.interfaceLikeButton.setImageResource(R.drawable.heart)
@@ -174,6 +176,14 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     private fun initActivity() {
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
+            "favouriteAdapter" -> {
+                startService()
+                musicList = ArrayList()
+                musicList.addAll(FavouriteActivity.favSongList)
+                setLayout()
+                initSong()
+            }
+
             "MusicAdapter" -> {
                 startService()
                 musicList = ArrayList()
@@ -181,6 +191,16 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 setLayout()
                 initSong()
             }
+
+            "FavouriteShuffle" -> {
+                startService()
+                musicList = ArrayList()
+                musicList.addAll(FavouriteActivity.favSongList)
+                musicList.shuffle()
+                setLayout()
+                initSong()
+            }
+
             "Now playing" -> {
                 showMusicInterfacePlaying()
             }
@@ -209,8 +229,13 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.interfaceArtistName.text = musicList[songPosition].album
             if (isRepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
             if (isShuffling) binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
-            if (isLiked) binding.interfaceLikeButton.setImageResource(R.drawable.heart)
-            else binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+            if (isLiked) {
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
+                binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
+            } else {
+                NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
+                binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+            }
         } catch (e: Exception) {
             return
         }
@@ -293,8 +318,8 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     override fun onCompletion(p0: MediaPlayer?) {
         setSongPosition(increment = true)
-        initSong()
         setLayout()
+        initSong()
 
         //for refreshing now playing image & text on song completion
         NowPlaying.binding.fragmentTitle.isSelected = true
@@ -365,9 +390,9 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             binding.interfacePlay.setImageResource((R.drawable.play))
         }
         if (isLiked) {
-            binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)
+            NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
         } else {
-            binding.interfaceLikeButton.setImageResource(R.drawable.heart)
+            NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
         }
     }
 }

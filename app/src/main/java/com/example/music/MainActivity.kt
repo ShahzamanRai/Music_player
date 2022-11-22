@@ -12,9 +12,11 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.music.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.util.*
-import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     lateinit var musicAdapter: MusicAdapter
@@ -29,33 +31,46 @@ class MainActivity : AppCompatActivity() {
         lateinit var binding: ActivityMainBinding
         var sortOrder: Int = 0
         val sortingList = arrayOf(
-            MediaStore.Audio.Media.DATE_ADDED + "DESC",
             MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.SIZE + "DESC"
+            MediaStore.Audio.Media.SIZE + " DESC",
+            MediaStore.Audio.Media.DATE_ADDED + " DESC"
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setTheme(R.style.Theme_Music)
         setContentView(binding.root)
 
-        if (requestRuntimePermission()) init()
+        if (requestRuntimePermission()) {
+            init()
+            FavouriteActivity.favSongList = ArrayList()
+            val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
+            val jsonString = editor.getString("FavouriteSongs", null)
+            val typeToken = object : TypeToken<ArrayList<MusicClass>>() {}.type
+            if (jsonString != null) {
+                val data: ArrayList<MusicClass> =
+                    GsonBuilder().create().fromJson(jsonString, typeToken)
+                FavouriteActivity.favSongList.addAll(data)
+            }
+        }
 
         binding.likedSongs.root.setOnClickListener {
             val intent = Intent(baseContext, FavouriteActivity::class.java)
             startActivity(intent)
         }
-/*
+
         binding.sort.setOnClickListener {
-            val menuList = arrayOf("Date Added", "Title", "Size")
+            val menuList = arrayOf("Title", "Size", "Recently added")
             var currentSort = sortOrder
             val builder = MaterialAlertDialogBuilder(this)
             builder.setTitle("Sorting")
-                .setPositiveButton("OK") { _, _ ->
+                .setPositiveButton("Sort") { _, _ ->
                     val editor = getSharedPreferences("SORTING", MODE_PRIVATE).edit()
                     editor.putInt("sortOrder", currentSort)
                     editor.apply()
+                    init()
                 }
                 .setSingleChoiceItems(menuList, currentSort) { _, which ->
                     currentSort = which
@@ -63,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             val customDialog = builder.create()
             customDialog.show()
         }
-*/
+
         binding.searchView.clearFocus()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -101,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             projection,
             selection,
             null,
-            MediaStore.Audio.Media.DATE_ADDED,
+            sortingList[sortOrder],
             null
         )
 
@@ -185,9 +200,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        sortOrder = sortEditor.getInt("sortOrder", 0)
         songList = getAudio()
         recyclerView = binding.listView
-        recyclerView.adapter = MusicAdapter(this, songList)
+        musicAdapter = MusicAdapter(this, songList)
+        recyclerView.adapter = musicAdapter
         recyclerView.setItemViewCacheSize(50)
         recyclerView.hasFixedSize()
         recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -196,14 +214,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (!MusicInterface.isPlaying && MusicInterface.musicService != null) {
-            MusicInterface.musicService!!.stopForeground(true)
-            MusicInterface.musicService!!.mediaPlayer!!.release()
-            MusicInterface.musicService = null
-            exitProcess(1)
+            exitApplication()
 
         }
+
     }
-    /*
+
     override fun onResume() {
         super.onResume()
         //for sorting
@@ -214,6 +230,10 @@ class MainActivity : AppCompatActivity() {
             songList = getAudio()
             musicAdapter.updateMusicList(songList)
         }
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavouriteActivity.favSongList)
+        editor.putString("FavouriteSongs", jsonString)
+        editor.apply()
     }
-    */
+
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.SingleLayoutBinding
 
@@ -35,11 +36,12 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.titleView.text = musicList[position].title
-        holder.albumName.text = musicList[position].album
+        holder.albumName.text = musicList[position].artist
         holder.duration.text = formatDuration(musicList[position].length)
         Glide
             .with(context)
-            .load(getImageArt(musicList[position].path))
+            .load(musicList[position].artUri)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(holder.imageView)
         holder.itemView.setOnClickListener {
