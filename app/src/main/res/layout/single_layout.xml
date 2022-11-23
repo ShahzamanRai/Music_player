@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="10dp"
     android:theme="@style/Theme.Music.Font">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
+        android:padding="5dp"
         android:contentDescription="@string/cover"
         android:src="@drawable/image_as_cover"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/titleView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         app:shapeAppearance="@style/roundedImageView" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/duration"
-        android:layout_toEndOf="@+id/imageView"
-        android:orientation="vertical">
+        android:layout_margin="5dp"
+        android:fontFamily="@font/medium"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/love_is_gone_by_slander_forever_on_love"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/albumName"
+        app:layout_constraintEnd_toStartOf="@+id/duration"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/titleView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/medium"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/love_is_gone_by_slander_forever_on_love"
-            android:textSize="15sp" />
+    <TextView
+        android:id="@+id/albumName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:fontFamily="@font/medium"
+        android:maxLines="1"
+        android:text="@string/albumName"
+        android:textSize="12sp"
+        android:theme="@style/Theme.Music.FontColor"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/duration"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
-        <TextView
-            android:id="@+id/albumName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:fontFamily="@font/medium"
-            android:maxLines="1"
-            android:text="@string/albumName"
-            android:textSize="12sp"
-            android:theme="@style/Theme.Music.FontColor" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:fontFamily="@font/medium"
         android:maxLines="1"
         android:text="@string/duration"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

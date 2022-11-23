@@ -12,7 +12,6 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
-import android.view.accessibility.AccessibilityNodeInfo.ExtraRenderingInfo
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 
@@ -128,7 +127,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             mediaSession.setCallback(object : MediaSessionCompat.Callback() {
 
                 override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    when(Intent.ACTION_MEDIA_BUTTON){
+                    when (Intent.ACTION_MEDIA_BUTTON) {
                         KeyEvent.keyCodeToString(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) -> {
                             if (MusicInterface.isPlaying) {
                                 //pause music
@@ -153,7 +152,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                         }
 
                         KeyEvent.keyCodeToString(KeyEvent.KEYCODE_NAVIGATE_PREVIOUS) -> {
-                            Toast.makeText(baseContext, "Previous pressed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(baseContext, "Previous pressed", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
 
@@ -219,7 +219,9 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             mediaPlayer!!.pause()
             showNotification(R.drawable.play_notification)
 
-        } else {
+        }
+        /*
+        else {
             //play music
             MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
             MusicInterface.isPlaying = true
@@ -227,5 +229,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
             showNotification(R.drawable.pause_notification)
         }
+
+
+         */
     }
 }

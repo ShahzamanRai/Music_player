@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(baseContext, FavouriteActivity::class.java)
             startActivity(intent)
         }
+        binding.playlistView.root.setOnClickListener {
+            val intent = Intent(baseContext, PlaylistActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.sort.setOnClickListener {
             val menuList = arrayOf("Title", "Size", "Recently added")

@@ -23,7 +23,6 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         return MyHolder(
             SingleLayoutBinding.inflate(
@@ -38,11 +37,16 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         holder.titleView.text = musicList[position].title
         holder.albumName.text = musicList[position].artist
         holder.duration.text = formatDuration(musicList[position].length)
+        val myOptions = RequestOptions()
+            .centerCrop()
+            .override(50, 50)
+
         Glide
             .with(context)
+            .applyDefaultRequestOptions(myOptions)
             .load(musicList[position].artUri)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
+            .error(R.drawable.image_as_cover)
             .into(holder.imageView)
         holder.itemView.setOnClickListener {
             if (MainActivity.isSearching)

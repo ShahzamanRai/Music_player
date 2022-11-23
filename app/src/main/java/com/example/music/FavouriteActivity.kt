@@ -18,7 +18,9 @@ class FavouriteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavouriteBinding.inflate(layoutInflater)
-        setTheme(R.style.Theme_Music)
+        if (favSongList.isNotEmpty()) {
+            setTheme(R.style.Theme_Music)
+        }
         setContentView(binding.root)
 
         binding.backButton.setOnClickListener {
@@ -36,7 +38,7 @@ class FavouriteActivity : AppCompatActivity() {
         }
     }
 
-    fun shuffleSongs() {
+    private fun shuffleSongs() {
         val intent = Intent(this, MusicInterface::class.java)
         intent.putExtra("index", 0)
         intent.putExtra("class", "FavouriteShuffle")

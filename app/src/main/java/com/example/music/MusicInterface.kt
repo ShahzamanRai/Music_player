@@ -14,13 +14,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.ActivityMusicInterfaceBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
@@ -33,6 +37,9 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var isShuffling: Boolean = false
         var fIndex: Int = -1
         var isLiked: Boolean = false
+        var min15: Boolean = false
+        var min30: Boolean = false
+        var min60: Boolean = false
 
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityMusicInterfaceBinding
@@ -72,6 +79,26 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
         binding.interfacePrevious.setOnClickListener {
             prevNextSong(increment = false)
+        }
+        binding.interfaceTimer.setOnClickListener {
+            val timer = min15 || min30 || min60
+            if(!timer) showBottomSheetDialog()
+            else {
+                val builder = MaterialAlertDialogBuilder(this)
+                builder.setTitle("Stop Timer")
+                    .setMessage("Do you want to stop timer?")
+                    .setPositiveButton("Yes"){ _, _ ->
+                        min15 = false
+                        min30 = false
+                        min60 = false
+                        binding.interfaceTimer.setColorFilter(ContextCompat.getColor(this, R.color.bgTimer))
+                    }
+                    .setNegativeButton("No"){dialog, _ ->
+                        dialog.dismiss()
+                    }
+                val customDialog = builder.create()
+                customDialog.show()
+            }
         }
 
         binding.interfaceShare.setOnClickListener {
@@ -393,6 +420,45 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
         } else {
             NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val dialog = BottomSheetDialog(this@MusicInterface)
+        dialog.setContentView(R.layout.bottom_sheet_dialog)
+        dialog.show()
+        dialog.findViewById<LinearLayout>(R.id.min_15)?.setOnClickListener {
+            Toast.makeText(baseContext, "Music will stop after 15 minutes", Toast.LENGTH_SHORT)
+                .show()
+            binding.interfaceTimer.setColorFilter(ContextCompat.getColor(this, R.color.green))
+            min15 = true
+            Thread {
+                Thread.sleep((15 * 60000).toLong())
+                if (min15) exitApplication()
+            }.start()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_30)?.setOnClickListener {
+            Toast.makeText(baseContext, "Music will stop after 30 minutes", Toast.LENGTH_SHORT)
+                .show()
+            binding.interfaceTimer.setColorFilter(ContextCompat.getColor(this, R.color.green))
+            min30 = true
+            Thread {
+                Thread.sleep((30 * 60000).toLong())
+                if (min30) exitApplication()
+            }.start()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_60)?.setOnClickListener {
+            Toast.makeText(baseContext, "Music will stop after 60 minutes", Toast.LENGTH_SHORT)
+                .show()
+            binding.interfaceTimer.setColorFilter(ContextCompat.getColor(this, R.color.green))
+            min60 = true
+            Thread {
+                Thread.sleep((60 * 60000).toLong())
+                if (min60) exitApplication()
+            }.start()
+            dialog.dismiss()
         }
     }
 }
