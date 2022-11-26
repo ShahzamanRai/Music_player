@@ -1,9 +1,7 @@
 package com.example.music
 
-import android.content.Context
 import android.media.MediaMetadataRetriever
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.color.MaterialColors
+import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
@@ -16,6 +14,18 @@ data class MusicClass(
     val path: String,
     val artUri: String
 )
+
+class Playlist {
+    lateinit var name: String
+    lateinit var playlist: ArrayList<MusicClass>
+    lateinit var createdBy: String
+    lateinit var createdOn: String
+}
+
+class MusicPlaylist {
+    var ref: ArrayList<Playlist> = ArrayList()
+}
+
 
 fun formatDuration(duration: Long): String {
     val minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
@@ -39,6 +49,15 @@ fun exitApplication() {
         MusicInterface.musicService = null
     }
     exitProcess(1)
+}
+
+fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
+    playlist.forEachIndexed { index, music ->
+        val file = File(music.path)
+        if (!file.exists())
+            playlist.removeAt(index)
+    }
+    return playlist
 }
 
 fun setSongPosition(increment: Boolean) {
@@ -77,4 +96,5 @@ fun favouriteCheck(id: String): Int {
     }
     return -1
 }
+
 

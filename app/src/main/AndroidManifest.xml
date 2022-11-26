@@ -18,6 +18,20 @@
         android:theme="@style/Theme.Music.Splash"
         tools:targetApi="31">
         <activity
+            android:name=".SelectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".PlaylistActivityDetails"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".PlaylistActivity"
             android:exported="false">
             <meta-data
@@ -59,7 +73,13 @@
                 android:value="" />
         </activity>
 
-        <service android:name=".MusicService" />
+        <service
+            android:name=".MusicService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".BroadcastReceiver"

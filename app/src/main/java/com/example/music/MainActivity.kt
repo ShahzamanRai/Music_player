@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         lateinit var songList: ArrayList<MusicClass>
         lateinit var recyclerView: RecyclerView
-        lateinit var filteredList: ArrayList<MusicClass>
+        lateinit var musicListSearch: ArrayList<MusicClass>
         var isSearching: Boolean = false
 
         @SuppressLint("StaticFieldLeak")
@@ -53,6 +54,12 @@ class MainActivity : AppCompatActivity() {
                 val data: ArrayList<MusicClass> =
                     GsonBuilder().create().fromJson(jsonString, typeToken)
                 FavouriteActivity.favSongList.addAll(data)
+            }
+            PlaylistActivity.musicPlaylist = MusicPlaylist()
+            val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+            if(jsonStringPlaylist != null){
+                val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
+                PlaylistActivity.musicPlaylist = dataPlaylist
             }
         }
 
@@ -85,16 +92,20 @@ class MainActivity : AppCompatActivity() {
 
         binding.searchView.clearFocus()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(s: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(s: String): Boolean {
-                filterList(s)
-                return false
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+            override fun onQueryTextChange(newText: String?): Boolean {
+                musicListSearch = ArrayList()
+                if (newText != null) {
+                    val userInput = newText.lowercase()
+                    for (song in songList)
+                        if (song.title.lowercase().contains(userInput))
+                            musicListSearch.add(song)
+                    isSearching = true
+                    musicAdapter.updateMusicList(searchList = musicListSearch)
+                }
+                return true
             }
         })
-
     }
 
     @SuppressLint("Recycle", "Range")
@@ -159,23 +170,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun filterList(text: String) {
-        if (text.trim { it <= ' ' }.isNotEmpty()) {
-            filteredList = ArrayList<MusicClass>()
-            for (song: MusicClass in songList) {
-                if (song.title.lowercase(Locale.ROOT)
-                        .contains(text.lowercase(Locale.getDefault()))
-                ) {
-                    filteredList.add(song)
-                }
-                recyclerView.adapter = MusicAdapter(this, filteredList)
-                isSearching = true
-            }
-        } else {
-            recyclerView.adapter = MusicAdapter(this, songList)
-        }
-    }
-
     private fun requestRuntimePermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 this, android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -237,7 +231,9 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString = GsonBuilder().create().toJson(FavouriteActivity.favSongList)
         editor.putString("FavouriteSongs", jsonString)
+        val jsonStringPlaylist = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
+        if (MusicInterface.musicService != null) binding.nowPlaying.visibility = View.VISIBLE
     }
-
 }

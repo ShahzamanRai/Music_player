@@ -82,18 +82,23 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         }
         binding.interfaceTimer.setOnClickListener {
             val timer = min15 || min30 || min60
-            if(!timer) showBottomSheetDialog()
+            if (!timer) showBottomSheetDialog()
             else {
                 val builder = MaterialAlertDialogBuilder(this)
                 builder.setTitle("Stop Timer")
                     .setMessage("Do you want to stop timer?")
-                    .setPositiveButton("Yes"){ _, _ ->
+                    .setPositiveButton("Yes") { _, _ ->
                         min15 = false
                         min30 = false
                         min60 = false
-                        binding.interfaceTimer.setColorFilter(ContextCompat.getColor(this, R.color.bgTimer))
+                        binding.interfaceTimer.setColorFilter(
+                            ContextCompat.getColor(
+                                this,
+                                R.color.bgTimer
+                            )
+                        )
                     }
-                    .setNegativeButton("No"){dialog, _ ->
+                    .setNegativeButton("No") { dialog, _ ->
                         dialog.dismiss()
                     }
                 val customDialog = builder.create()
@@ -227,6 +232,21 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 setLayout()
                 initSong()
             }
+            "PlaylistDetailsAdapter" -> {
+                startService()
+                musicList = ArrayList()
+                musicList.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist)
+                setLayout()
+                initSong()
+            }
+            "PlaylistDetailsShuffle" -> {
+                startService()
+                musicList = ArrayList()
+                musicList.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist)
+                musicList.shuffle()
+                setLayout()
+                initSong()
+            }
 
             "Now playing" -> {
                 showMusicInterfacePlaying()
@@ -238,7 +258,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             "MusicAdapterSearch" -> {
                 startService()
                 musicList = ArrayList()
-                musicList.addAll(MainActivity.filteredList)
+                musicList.addAll(MainActivity.musicListSearch)
                 setLayout()
                 initSong()
             }

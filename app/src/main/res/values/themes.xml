@@ -6,7 +6,9 @@
         <item name="colorPrimaryVariant">@color/blue</item>
         <item name="colorOnPrimary">@color/blue</item>
         <item name="colorAccent">@color/white</item>
-        <item name="android:statusBarColor">@color/blue</item>
+        <item name="fontFamily">@font/medium</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.Music.Font">
@@ -14,6 +16,10 @@
         <item name="android:textColor">@color/blue</item>
         <item name="android:fontFamily">@font/bold</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Theme.Music.FontColorDetails">
+        <item name="android:textColor">@color/blue</item>
     </style>
 
     <style name="Theme.Music.playlist">
@@ -38,9 +44,15 @@
         <item name="android:textColor">@color/lightBlue</item>
     </style>
 
+    <style name="Theme.Music.FontColorPlaylist">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Theme.Music.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+
     </style>
 
     <style name="Theme.Music.progressBar">

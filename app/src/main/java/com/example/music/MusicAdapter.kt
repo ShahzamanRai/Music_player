@@ -11,7 +11,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.SingleLayoutBinding
 
-class MusicAdapter(private val context: Context, private var musicList: ArrayList<MusicClass>) :
+class MusicAdapter(
+    private val context: Context,
+    private var musicList: ArrayList<MusicClass>,
+    private val playlistDetails: Boolean = false,
+    private val selectionActivity: Boolean = false
+) :
     RecyclerView.Adapter<MusicAdapter.MyHolder>() {
 
     class MyHolder(binding: SingleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -39,7 +44,7 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         holder.duration.text = formatDuration(musicList[position].length)
         val myOptions = RequestOptions()
             .centerCrop()
-            .override(50, 50)
+            .override(100, 100)
 
         Glide
             .with(context)
@@ -48,11 +53,35 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .error(R.drawable.image_as_cover)
             .into(holder.imageView)
-        holder.itemView.setOnClickListener {
-            if (MainActivity.isSearching)
-                sendIntent(position = position, parameter = "MusicAdapterSearch")
-            else
-                sendIntent(position = position, parameter = "MusicAdapter")
+        when {
+            playlistDetails -> {
+                holder.root.setOnClickListener {
+                    sendIntent(position = position, parameter = "PlaylistDetailsAdapter")
+                }
+            }
+
+            selectionActivity -> {
+                holder.root.setOnClickListener {
+                    if (addSong(musicList[position]))
+                        holder.root.setBackgroundResource(R.drawable.bg_selection)
+                    else
+                        holder.root.setBackgroundColor(
+                            ContextCompat.getColor(
+                                context,
+                                R.color.unSelectBG
+                            )
+                        )
+
+                }
+            }
+            else -> {
+                holder.itemView.setOnClickListener {
+                    if (MainActivity.isSearching)
+                        sendIntent(position = position, parameter = "MusicAdapterSearch")
+                    else
+                        sendIntent(position = position, parameter = "MusicAdapter")
+                }
+            }
         }
     }
 
@@ -73,4 +102,27 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
         musicList.addAll(searchList)
         notifyDataSetChanged()
     }
+
+    private fun addSong(song: MusicClass): Boolean {
+        PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist.forEachIndexed { index, music ->
+            if (song.id == music.id) {
+                PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist.removeAt(
+                    index
+                )
+                return false
+            }
+        }
+        PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist.add(
+            song
+        )
+        return true
+    }
+
+    fun refreshPlaylist() {
+        musicList = ArrayList()
+        musicList =
+            PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist
+        notifyDataSetChanged()
+    }
+
 }

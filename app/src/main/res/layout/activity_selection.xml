@@ -15,33 +15,26 @@
 
         <ImageButton
             android:id="@+id/backButton"
-            android:paddingStart="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="start"
             android:background="@null"
             android:contentDescription="@string/albumName"
             android:paddingHorizontal="10dp"
+            android:paddingStart="15dp"
             android:src="@drawable/back"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
-
-        <TextView
-            android:id="@+id/header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/bold"
-            android:text="@string/playlist"
-            android:textSize="26sp" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_marginHorizontal="10dp"
+            android:background="@drawable/search_bg"
             app:defaultQueryHint="Search music"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search Songs"
             app:searchHintIcon="@null"
             app:searchIcon="@drawable/search_icon" />
 
@@ -49,25 +42,15 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listViewPA"
+        android:id="@+id/listViewSA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:orientation="vertical"
+        android:padding="10dp"
         android:scrollbarThumbVertical="@drawable/scroll_bar"
         android:scrollbars="vertical"
         app:spanCount="1" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/green"
-        android:contentDescription="@string/_00_00"
-        android:src="@drawable/add" />
 
 </RelativeLayout>

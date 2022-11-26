@@ -11,5 +11,6 @@
     <color name="darkGrey">#2A2A2A</color>
     <color name="bgPlay">#F2E7D5</color>
     <color name="bgTimer">#DADBE1</color>
-
+    <color name="searchBG">#DADBE1</color>
+    <color name="unSelectBG">#121212</color>
 </resources>

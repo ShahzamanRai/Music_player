@@ -22,7 +22,7 @@ class FavouriteActivity : AppCompatActivity() {
             setTheme(R.style.Theme_Music)
         }
         setContentView(binding.root)
-
+        favSongList = checkPlaylist(favSongList)
         binding.backButton.setOnClickListener {
             finish()
         }

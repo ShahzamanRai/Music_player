@@ -19,4 +19,12 @@
     <string name="_60_minutes">60 Minutes</string>
     <string name="_30_minutes">30 Minutes</string>
     <string name="_15_minutes">15 Minutes</string>
+    <string name="playlist_name">Playlist Name</string>
+    <string name="your_name">Your Name</string>
+    <string name="playlistname">PlayListName</string>
+    <string name="createdBy">createdBy</string>
+    <string name="created_on">Created On</string>
+    <string name="total_songs">Total Songs</string>
+    <string name="add">Add</string>
+    <string name="remove_all">Remove All</string>
 </resources>
