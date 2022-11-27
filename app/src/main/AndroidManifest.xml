@@ -18,6 +18,20 @@
         android:theme="@style/Theme.Music.Splash"
         tools:targetApi="31">
         <activity
+            android:name=".AboutActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".FeedbackActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SelectionActivity"
             android:exported="false">
             <meta-data

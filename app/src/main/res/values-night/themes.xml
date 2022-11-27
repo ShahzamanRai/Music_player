@@ -7,6 +7,7 @@
         <item name="font">@font/bold</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/white</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
         <item name="fontFamily">@font/medium</item>
         <item name="android:statusBarColor">@color/blue</item>
     </style>

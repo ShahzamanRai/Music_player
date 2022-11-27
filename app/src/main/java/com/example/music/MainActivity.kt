@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -21,6 +23,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var musicAdapter: MusicAdapter
+    private lateinit var toggle: ActionBarDrawerToggle
 
     companion object {
         lateinit var songList: ArrayList<MusicClass>
@@ -43,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setTheme(R.style.Theme_Music)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+
 
         if (requestRuntimePermission()) {
             init()
@@ -57,15 +62,36 @@ class MainActivity : AppCompatActivity() {
             }
             PlaylistActivity.musicPlaylist = MusicPlaylist()
             val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
-            if(jsonStringPlaylist != null){
-                val dataPlaylist: MusicPlaylist = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
+            if (jsonStringPlaylist != null) {
+                val dataPlaylist: MusicPlaylist =
+                    GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlaylist::class.java)
                 PlaylistActivity.musicPlaylist = dataPlaylist
             }
         }
+//for nav drawer
+        toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
+        binding.root.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
         binding.likedSongs.root.setOnClickListener {
             val intent = Intent(baseContext, FavouriteActivity::class.java)
             startActivity(intent)
+        }
+        binding.navView.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.navFeedback -> {
+                    startActivity(Intent(this,FeedbackActivity::class.java))
+                }
+                R.id.navAbout -> {
+                    startActivity(Intent(this,AboutActivity::class.java))
+                }
+                R.id.navExit -> {
+                    exitApplication()
+                }
+            }
+            true
         }
         binding.playlistView.root.setOnClickListener {
             val intent = Intent(baseContext, PlaylistActivity::class.java)
@@ -235,5 +261,12 @@ class MainActivity : AppCompatActivity() {
         editor.putString("MusicPlaylist", jsonStringPlaylist)
         editor.apply()
         if (MusicInterface.musicService != null) binding.nowPlaying.visibility = View.VISIBLE
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item))
+            return true
+        return super.onOptionsItemSelected(item)
+
     }
 }
