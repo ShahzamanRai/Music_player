@@ -12,7 +12,6 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 
 class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
@@ -22,7 +21,11 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
     lateinit var audioManager: AudioManager
-    val BroadcastRecicver: BroadcastReceiver = BroadcastReceiver()
+    val broadcastReceiver: BroadcastReceiver = BroadcastReceiver()
+
+    companion object {
+        lateinit var playPendingIntent: PendingIntent
+    }
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "Music")
@@ -59,7 +62,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
         val playIntent =
             Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.PLAY)
-        val playPendingIntent = PendingIntent.getBroadcast(
+        playPendingIntent = PendingIntent.getBroadcast(
             baseContext, 3, playIntent, PendingIntent.FLAG_UPDATE_CURRENT
 
         )
@@ -127,8 +130,13 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             mediaSession.setCallback(object : MediaSessionCompat.Callback() {
 
                 override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    when (Intent.ACTION_MEDIA_BUTTON) {
-                        KeyEvent.keyCodeToString(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) -> {
+                    val intentAction: String = mediaButtonEvent!!.action!!
+                    if (Intent.ACTION_MEDIA_BUTTON == intentAction) {
+                        val event: KeyEvent =
+                            mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)!!
+                        val keyCode: Int = event.keyCode
+                        val action: Int = event.action
+                        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
                             if (MusicInterface.isPlaying) {
                                 //pause music
                                 MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
@@ -145,19 +153,21 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                                 NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
 
                             }
+
+                            return true
                         }
 
-                        KeyEvent.keyCodeToString(KeyEvent.KEYCODE_NAVIGATE_NEXT) -> {
-                            Toast.makeText(baseContext, "Next pressed", Toast.LENGTH_SHORT).show()
+                        if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
+                            broadcastReceiver.prevNextMusic(increment = true, baseContext)
+                            return true
                         }
 
-                        KeyEvent.keyCodeToString(KeyEvent.KEYCODE_NAVIGATE_PREVIOUS) -> {
-                            Toast.makeText(baseContext, "Previous pressed", Toast.LENGTH_SHORT)
-                                .show()
+                        if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
+                            broadcastReceiver.prevNextMusic(increment = false, baseContext)
+                            return true
                         }
                     }
-
-                    return super.onMediaButtonEvent(mediaButtonEvent)
+                    return false
                 }
 
                 override fun onSeekTo(pos: Long) {
@@ -219,9 +229,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             mediaPlayer!!.pause()
             showNotification(R.drawable.play_notification)
 
-        }
-        /*
-        else {
+        } else {
             //play music
             MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
             MusicInterface.isPlaying = true
@@ -230,7 +238,5 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             showNotification(R.drawable.pause_notification)
         }
 
-
-         */
     }
 }

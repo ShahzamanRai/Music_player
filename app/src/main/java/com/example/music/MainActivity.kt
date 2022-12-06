@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-
         if (requestRuntimePermission()) {
             init()
             FavouriteActivity.favSongList = ArrayList()
@@ -80,12 +79,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.navView.setNavigationItemSelectedListener {
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.navFeedback -> {
-                    startActivity(Intent(this,FeedbackActivity::class.java))
+                    startActivity(Intent(this, FeedbackActivity::class.java))
                 }
                 R.id.navAbout -> {
-                    startActivity(Intent(this,AboutActivity::class.java))
+                    startActivity(Intent(this, AboutActivity::class.java))
                 }
                 R.id.navExit -> {
                     exitApplication()
@@ -237,11 +236,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!MusicInterface.isPlaying && MusicInterface.musicService != null) {
-            exitApplication()
-
-        }
-
+        exitApplication()
     }
 
     override fun onResume() {

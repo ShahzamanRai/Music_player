@@ -22,7 +22,7 @@ class BroadcastReceiver : BroadcastReceiver() {
                 prevNextMusic(increment = true, context = context!!)
             }
             ApplicationClass.EXIT -> {
-                exitApplication()
+                exitApplicationNotification()
             }
         }
     }

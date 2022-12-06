@@ -316,17 +316,19 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             musicService!!.mediaPlayer!!.start()
             binding.interfacePlay.setImageResource((R.drawable.pause))
             musicService!!.showNotification(R.drawable.pause_notification)
+            NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
         } catch (e: Exception) {
             return
         }
     }
 
-    private fun pauseMusic() {
+    fun pauseMusic() {
         try {
             isPlaying = false
             musicService!!.mediaPlayer!!.pause()
             binding.interfacePlay.setImageResource((R.drawable.play))
             musicService!!.showNotification(R.drawable.play_notification)
+            NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
         } catch (e: Exception) {
             return
         }

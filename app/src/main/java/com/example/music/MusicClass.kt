@@ -51,6 +51,15 @@ fun exitApplication() {
     exitProcess(1)
 }
 
+fun exitApplicationNotification() {
+    if (MusicInterface.isPlaying){
+        val musicInterface : MusicInterface = MusicInterface()
+        musicInterface.pauseMusic()
+    }
+    MusicInterface.musicService!!.stopForeground(true)
+
+}
+
 fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
     playlist.forEachIndexed { index, music ->
         val file = File(music.path)
