@@ -3,7 +3,6 @@ package com.example.music
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
-import androidx.palette.graphics.Palette
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
@@ -58,7 +57,7 @@ fun exitApplication() {
 
 fun exitApplicationNotification() {
     if (MusicInterface.isPlaying) {
-        val musicInterface: MusicInterface = MusicInterface()
+        val musicInterface = MusicInterface()
         musicInterface.pauseMusic()
     }
     MusicInterface.musicService!!.stopForeground(true)
@@ -94,9 +93,9 @@ fun setSongPosition(increment: Boolean) {
 fun shuffleSongs() {
     var newSong: Int = MusicInterface.songPosition
     while (newSong == MusicInterface.songPosition) {
-        newSong = kotlin.random.Random.nextInt(MusicInterface.musicList.size);
+        newSong = kotlin.random.Random.nextInt(MusicInterface.musicList.size)
     }
-    MusicInterface.songPosition = newSong;
+    MusicInterface.songPosition = newSong
 }
 
 fun favouriteCheck(id: String): Int {
@@ -120,9 +119,9 @@ fun getMainColor(img: Bitmap): Int {
 
 fun manipulateColor(color: Int, factor: Float): Int {
     val a: Int = Color.alpha(color)
-    val r = (Color.red(color) * factor).roundToInt().toInt()
-    val g = (Color.green(color) * factor).roundToInt().toInt()
-    val b = (Color.blue(color) * factor).roundToInt().toInt()
+    val r = (Color.red(color) * factor).roundToInt()
+    val g = (Color.green(color) * factor).roundToInt()
+    val b = (Color.blue(color) * factor).roundToInt()
     return Color.argb(
         a,
         r.coerceAtMost(255),

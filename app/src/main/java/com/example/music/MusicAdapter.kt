@@ -2,8 +2,8 @@ package com.example.music
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +41,7 @@ class MusicAdapter(
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
+
         holder.titleView.text = musicList[position].title
         holder.albumName.text = musicList[position].artist
         holder.duration.text = formatDuration(musicList[position].length)

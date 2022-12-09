@@ -1,19 +1,19 @@
 package com.example.music
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.music.databinding.ActivityMainBinding
@@ -31,7 +31,6 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     lateinit var musicAdapter: MusicAdapter
     private lateinit var toggle: ActionBarDrawerToggle
-    val nowPlaying : NowPlaying = NowPlaying()
 
     companion object {
         lateinit var songList: ArrayList<MusicClass>
@@ -144,10 +143,14 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(2000)
                     songList = getAudio()
-                    for (index in 0 until songList.size - 1) {
-                        if (songList[index].length < 45000) {
+                    repeat(songList.size - 1) { index ->
+                        if (songList[index].length.toInt() < 45000) {
                             songList.removeAt(index)
                         }
+                        Log.d(TAG, "init: " + +songList[index].length)
+                    }
+                    if (songList[songList.size - 1].length < 45000) {
+                        songList.removeAt(songList.size - 1)
                     }
                     musicAdapter.updateMusicList(songList)
                     binding.refreshLayout.setRefreshing(false) // This stops refreshing
@@ -263,20 +266,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+
         val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
         sortOrder = sortEditor.getInt("sortOrder", 0)
         songList = getAudio()
         recyclerView = binding.listView
-        for (index in 0 until songList.size - 1) {
-            if (songList[index].length < 45000) {
+        repeat(songList.size - 1) { index ->
+            if (songList[index].length.toInt() < 45000) {
                 songList.removeAt(index)
             }
+            Log.d(TAG, "init: " + +songList[index].length)
+        }
+        if (songList[songList.size - 1].length < 45000) {
+            songList.removeAt(songList.size - 1)
         }
         musicAdapter = MusicAdapter(this, songList)
         recyclerView.adapter = musicAdapter
         recyclerView.setItemViewCacheSize(50)
         recyclerView.hasFixedSize()
         recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+
     }
 
     override fun onDestroy() {

@@ -56,7 +56,8 @@ class PlaylistActivity : AppCompatActivity() {
                         addPlaylist(playlistName.toString(), createdBy.toString())
                     }
                 dialog.dismiss()
-            }.show()
+            }
+        builder.show()
     }
 
     private fun addPlaylist(name: String, createdBy: String) {

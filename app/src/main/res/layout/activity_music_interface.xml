@@ -15,6 +15,7 @@
         android:layout_marginEnd="15dp">
 
         <ImageButton
+            android:theme="@style/Theme.Music.IconFillColor"
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -130,8 +131,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:orientation="horizontal"
+        android:theme="@style/Theme.Music.IconFillColor">
 
         <ImageButton
             android:id="@+id/interfaceShuffle"
@@ -142,7 +143,6 @@
             android:contentDescription="@string/todo"
             android:src="@drawable/shuffle" />
 
-
         <ImageButton
             android:id="@+id/interfaceRepeat"
             style="?android:attr/buttonBarButtonStyle"
@@ -152,7 +152,6 @@
             android:contentDescription="@string/todo"
             android:src="@drawable/repeat" />
 
-
         <ImageButton
             android:id="@+id/interfaceTimer"
             style="?android:attr/buttonBarButtonStyle"
@@ -161,7 +160,6 @@
             android:layout_weight="1"
             android:contentDescription="@string/todo"
             android:src="@drawable/timer" />
-
 
         <ImageButton
             android:id="@+id/interfaceEqualizer"
@@ -189,7 +187,8 @@
         android:layout_margin="20dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/round_button"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:theme="@style/Theme.Music.IconFillColorTransparent">
 
         <ImageButton
             android:id="@+id/interfacePrevious"
@@ -197,7 +196,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="Previous"
+            android:contentDescription="@string/previous"
             android:src="@drawable/previous" />
 
         <ImageButton
@@ -206,7 +205,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="playPause"
+            android:contentDescription="@string/playpause"
             android:src="@drawable/play" />
 
         <ImageButton
@@ -215,9 +214,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="Next"
+            android:contentDescription="@string/next"
             android:src="@drawable/next" />
 
     </LinearLayout>
-
 </LinearLayout>

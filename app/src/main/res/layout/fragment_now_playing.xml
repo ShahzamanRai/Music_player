@@ -68,7 +68,8 @@
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/fragmentButton"
             android:contentDescription="@string/cover"
-            android:src="@drawable/heart_fragment" />
+            android:src="@drawable/heart_fragment"
+            />
 
         <ImageButton
             android:id="@+id/fragmentButton"
@@ -79,7 +80,8 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
             android:contentDescription="@string/cover"
-            android:src="@drawable/play_now" />
+            android:src="@drawable/play_now"
+            app:tint="@color/white" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

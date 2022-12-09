@@ -9,6 +9,7 @@
     tools:context=".FavouriteActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:theme="@style/Theme.Music.IconFillColor"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

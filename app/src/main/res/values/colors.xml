@@ -14,5 +14,7 @@
     <color name="searchBG">#0b0b0b</color>
     <color name="selectedBG">#BC00F15E</color>
     <color name="unSelectBG">#ffffff</color>
-
+    <color name="splash_screen_background">#DADBE1</color>
+    <color name="music_icon_tint">#121212</color>
+    <color name="shimmerBackground">#dddddd</color>
 </resources>

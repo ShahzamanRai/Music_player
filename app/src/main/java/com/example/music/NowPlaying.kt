@@ -1,8 +1,10 @@
 package com.example.music
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,15 +59,15 @@ class NowPlaying : Fragment() {
             binding.root.visibility = View.VISIBLE
             binding.fragmentTitle.isSelected = true
 
-            binding.root.setOnClickListener {
-                val intent = Intent(requireContext(), MusicInterface::class.java)
-                intent.putExtra("index", MusicInterface.songPosition)
-                intent.putExtra("class", "Now playing")
-                ContextCompat.startActivity(requireContext(), intent, null)
-            }
-
-            /*
             binding.root.setOnTouchListener(object : OnSwipeTouchListener(requireContext()) {
+                override fun onSingleClick() {
+                    openActivity()
+                }
+
+                override fun onSwipeTop() {
+                    Log.d(TAG, "onSwipeTop: Performed")
+                    openActivity()
+                }
 
                 override fun onSwipeLeft() {
                     nextPrevMusic(increment = true)
@@ -76,7 +78,6 @@ class NowPlaying : Fragment() {
                 }
             })
 
-            */
             Glide.with(this)
                 .load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
                 .apply(
@@ -123,5 +124,12 @@ class NowPlaying : Fragment() {
         binding.fragmentAlbumName.text =
             MusicInterface.musicList[MusicInterface.songPosition].album
         playMusic()
+    }
+
+    fun openActivity() {
+        val intent = Intent(requireContext(), MusicInterface::class.java)
+        intent.putExtra("index", MusicInterface.songPosition)
+        intent.putExtra("class", "Now playing")
+        ContextCompat.startActivity(requireContext(), intent, null)
     }
 }

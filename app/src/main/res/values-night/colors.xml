@@ -13,4 +13,6 @@
     <color name="bgTimer">#DADBE1</color>
     <color name="searchBG">#DADBE1</color>
     <color name="unSelectBG">#121212</color>
+    <color name="splash_screen_background">#0b0b0b</color>
+    <color name="music_icon_tint">#DADBE1</color>
 </resources>

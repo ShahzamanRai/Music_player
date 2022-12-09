@@ -31,8 +31,7 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun openLinkPage(id: String) {
-        var intent = Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://add/%@$id"))
-        intent = Intent(
+        val intent = Intent(
             Intent.ACTION_VIEW,
             Uri.parse(id)
         )

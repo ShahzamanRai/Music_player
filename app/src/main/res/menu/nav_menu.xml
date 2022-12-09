@@ -3,7 +3,7 @@
 
     <item android:id="@+id/navFeedback"
         android:title="@string/feedback"
-        android:icon="@drawable/music_note"/>
+        android:icon="@drawable/ic_baseline_feedback_24"/>
 
     <item android:id="@+id/navAbout"
         android:title="@string/about"

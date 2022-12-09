@@ -1,10 +1,7 @@
 package com.example.music
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.drawable.GradientDrawable
@@ -16,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
@@ -177,7 +175,20 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             }
         }
 
-        binding.interfaceCover.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
+        binding.root.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
+
+            override fun onSingleClick() {
+                if (isPlaying) {
+                    pauseMusic()
+                } else {
+                    playMusic()
+                }
+            }
+
+            override fun onSwipeDown() {
+                Log.d(ContentValues.TAG, "onSwipeDown: Performed")
+                finish()
+            }
 
             override fun onSwipeLeft() {
                 prevNextSong(increment = true)
@@ -377,7 +388,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         //for refreshing now playing image & text on song completion
         NowPlaying.binding.fragmentTitle.isSelected = true
         Glide.with(applicationContext)
-            .load(getImageArt(MusicInterface.musicList[MusicInterface.songPosition].path))
+            .load(getImageArt(musicList[songPosition].path))
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(NowPlaying.binding.fragmentImage)
         NowPlaying.binding.fragmentTitle.text = musicList[songPosition].title
@@ -421,12 +432,6 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     override fun onDestroy() {
         super.onDestroy()
         if (musicList[songPosition].id == "Unknown" && !isPlaying) exitApplication()
-    }
-
-    private fun startService() {
-        val intent = Intent(this, MusicService::class.java)
-        bindService(intent, this, BIND_AUTO_CREATE)
-        startService(intent)
     }
 
     private fun showMusicInterfacePlaying() {
@@ -490,8 +495,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun initServiceAndPlaylist(
         playlist: ArrayList<MusicClass>,
-        shuffle: Boolean,
-        playNext: Boolean = false
+        shuffle: Boolean
     ) {
         val intent = Intent(this, MusicService::class.java)
         bindService(intent, this, BIND_AUTO_CREATE)

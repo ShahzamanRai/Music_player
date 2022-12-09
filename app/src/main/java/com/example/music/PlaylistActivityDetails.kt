@@ -17,7 +17,6 @@ class PlaylistActivityDetails : AppCompatActivity() {
 
     lateinit var binding: ActivityPlaylistDetailsBinding
     private lateinit var adapter: MusicAdapter
-    private val mainActivity: MainActivity = MainActivity()
 
     companion object {
         var currentPlaylistPos: Int = -1
@@ -56,9 +55,9 @@ class PlaylistActivityDetails : AppCompatActivity() {
         binding.PlaylistNamePAD.text = PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].name
         binding.PlaylistSizePAD.text = adapter.itemCount.toString() + " Songs"
         binding.PlaylistDatePAD.text =
-            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdOn.toString()
+            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdOn
         binding.PlaylistCreatedByPAD.text =
-            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdBy.toString()
+            PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].createdBy
         if (adapter.itemCount > 0) {
             val myOptions = RequestOptions()
                 .centerCrop()

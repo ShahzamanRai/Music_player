@@ -54,10 +54,4 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
         return musicList.size
     }
 
-    private fun sendIntent(position: Int, parameter: String) {
-        val intent = Intent(context, MusicInterface::class.java)
-        intent.putExtra("index", position)
-        intent.putExtra("class", parameter)
-        ContextCompat.startActivity(context, intent, null)
-    }
 }

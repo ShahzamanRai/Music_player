@@ -11,6 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme="@style/Theme.Music.IconFillColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,8 +53,9 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imagePAD"
-        android:layout_width="0dp"
+        android:layout_width="150dp"
         android:layout_height="150dp"
+
         android:padding="15dp"
         android:src="@drawable/image_as_cover"
         app:layout_constraintBottom_toTopOf="@id/listViewPAD"
@@ -65,7 +67,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         style="@style/Theme.Music.FontColorPlaylist"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingVertical="15dp"
@@ -126,11 +128,11 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:baselineAligned="false">
+        app:layout_constraintStart_toStartOf="parent">
 
         <include
             android:id="@+id/addPAD"
