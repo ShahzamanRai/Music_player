@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:orientation="vertical"
+    android:gravity="start"
     android:layout_marginTop="55dp">
 
     <ImageView
@@ -13,14 +13,5 @@
         android:paddingTop="15dp"
         android:src="@drawable/music_note"
         android:contentDescription="@string/app_name"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:gravity="start"
-        android:text="Music Player By Shahzaman"
-        android:textSize="26sp"
-        android:textColor="@color/white" />
 
 </LinearLayout>

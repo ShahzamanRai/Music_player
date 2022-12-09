@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:lines="2"
+            android:lineSpacingExtra="2dp"
             android:paddingHorizontal="15dp"
             android:text="@string/liked_songs" />
     </LinearLayout>

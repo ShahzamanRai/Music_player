@@ -1,9 +1,14 @@
 package com.example.music
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.media.MediaMetadataRetriever
+import androidx.palette.graphics.Palette
 import java.io.File
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
+
 
 data class MusicClass(
     val id: String,
@@ -52,12 +57,11 @@ fun exitApplication() {
 }
 
 fun exitApplicationNotification() {
-    if (MusicInterface.isPlaying){
-        val musicInterface : MusicInterface = MusicInterface()
+    if (MusicInterface.isPlaying) {
+        val musicInterface: MusicInterface = MusicInterface()
         musicInterface.pauseMusic()
     }
     MusicInterface.musicService!!.stopForeground(true)
-
 }
 
 fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
@@ -71,18 +75,18 @@ fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
 
 fun setSongPosition(increment: Boolean) {
     if (!MusicInterface.isRepeating) {
-        if (!MusicInterface.isShuffling) {
-            if (increment) {
+        if (increment) {
+            if (MusicInterface.isShuffling) {
+                shuffleSongs()
+            } else {
                 if (MusicInterface.musicList.size - 1 == MusicInterface.songPosition) {
                     MusicInterface.songPosition = 0
                 } else ++MusicInterface.songPosition
-            } else {
-                if (0 == MusicInterface.songPosition) MusicInterface.songPosition =
-                    MusicInterface.musicList.size - 1
-                else --MusicInterface.songPosition
             }
         } else {
-            shuffleSongs()
+            if (0 == MusicInterface.songPosition) MusicInterface.songPosition =
+                MusicInterface.musicList.size - 1
+            else --MusicInterface.songPosition
         }
     }
 }
@@ -105,5 +109,28 @@ fun favouriteCheck(id: String): Int {
     }
     return -1
 }
+
+fun getMainColor(img: Bitmap): Int {
+    val newImg = Bitmap.createScaledBitmap(img, 1, 1, true)
+    val color = newImg.getPixel(0, 0)
+    newImg.recycle()
+    return manipulateColor(color, 0.8.toFloat())
+}
+
+
+fun manipulateColor(color: Int, factor: Float): Int {
+    val a: Int = Color.alpha(color)
+    val r = (Color.red(color) * factor).roundToInt().toInt()
+    val g = (Color.green(color) * factor).roundToInt().toInt()
+    val b = (Color.blue(color) * factor).roundToInt().toInt()
+    return Color.argb(
+        a,
+        r.coerceAtMost(255),
+        g.coerceAtMost(255),
+        b.coerceAtMost(255)
+    )
+}
+
+
 
 

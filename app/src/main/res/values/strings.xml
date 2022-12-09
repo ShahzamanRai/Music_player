@@ -32,4 +32,7 @@
     <string name="feedback">Feedback</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>
+    <string name="name">Shahzaman Rai</string>
+    <string name="details">Adaptable Computer Science major (3.4 GPA) currently attending the University of Okara. I aim to leverage proven communication, creative thinking, and interpersonal skills. Frequently praised as adaptable by my peers.</string>
+    <string name="contact_me">Contact Me</string>
 </resources>

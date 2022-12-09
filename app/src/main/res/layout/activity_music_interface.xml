@@ -133,7 +133,6 @@
         android:orientation="horizontal">
 
 
-
         <ImageButton
             android:id="@+id/interfaceShuffle"
             style="?android:attr/buttonBarButtonStyle"
@@ -184,6 +183,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/mainBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

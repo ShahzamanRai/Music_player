@@ -8,28 +8,37 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.music.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.simform.refresh.SSPullToRefreshLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var musicAdapter: MusicAdapter
     private lateinit var toggle: ActionBarDrawerToggle
+    val nowPlaying : NowPlaying = NowPlaying()
 
     companion object {
         lateinit var songList: ArrayList<MusicClass>
         lateinit var recyclerView: RecyclerView
         lateinit var musicListSearch: ArrayList<MusicClass>
         var isSearching: Boolean = false
+        var playNextList: ArrayList<MusicClass> = ArrayList()
 
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivityMainBinding
@@ -67,6 +76,8 @@ class MainActivity : AppCompatActivity() {
                 PlaylistActivity.musicPlaylist = dataPlaylist
             }
         }
+
+
 //for nav drawer
         toggle = ActionBarDrawerToggle(this, binding.root, R.string.open, R.string.close)
         binding.root.addDrawerListener(toggle)
@@ -87,7 +98,17 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, AboutActivity::class.java))
                 }
                 R.id.navExit -> {
-                    exitApplication()
+                    val builder = MaterialAlertDialogBuilder(this)
+                    builder.setTitle("Exit")
+                        .setMessage("Do you want to close app?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            exitApplication()
+                        }
+                        .setNegativeButton("No") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                    val customDialog = builder.create()
+                    customDialog.show()
                 }
             }
             true
@@ -96,6 +117,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(baseContext, PlaylistActivity::class.java)
             startActivity(intent)
         }
+
 
         binding.sort.setOnClickListener {
             val menuList = arrayOf("Title", "Size", "Recently added")
@@ -114,6 +136,24 @@ class MainActivity : AppCompatActivity() {
             val customDialog = builder.create()
             customDialog.show()
         }
+        //for refreshing layout on swipe from top
+        binding.refreshLayout.setRefreshView(WaveAnimation(this@MainActivity))
+        binding.refreshLayout.setOnRefreshListener(object :
+            SSPullToRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(2000)
+                    songList = getAudio()
+                    for (index in 0 until songList.size - 1) {
+                        if (songList[index].length < 45000) {
+                            songList.removeAt(index)
+                        }
+                    }
+                    musicAdapter.updateMusicList(songList)
+                    binding.refreshLayout.setRefreshing(false) // This stops refreshing
+                }
+            }
+        })
 
         binding.searchView.clearFocus()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -227,6 +267,11 @@ class MainActivity : AppCompatActivity() {
         sortOrder = sortEditor.getInt("sortOrder", 0)
         songList = getAudio()
         recyclerView = binding.listView
+        for (index in 0 until songList.size - 1) {
+            if (songList[index].length < 45000) {
+                songList.removeAt(index)
+            }
+        }
         musicAdapter = MusicAdapter(this, songList)
         recyclerView.adapter = musicAdapter
         recyclerView.setItemViewCacheSize(50)

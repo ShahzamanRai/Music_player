@@ -2,6 +2,7 @@ package com.example.music
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.SingleLayoutBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MusicAdapter(
     private val context: Context,
@@ -53,6 +55,22 @@ class MusicAdapter(
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .error(R.drawable.image_as_cover)
             .into(holder.imageView)
+        if (!selectionActivity) {
+            holder.root.setOnLongClickListener {
+                try {
+                    if (MainActivity.playNextList.isEmpty()) {
+                        MainActivity.playNextList.add(MusicInterface.musicList[MusicInterface.songPosition])
+                        MusicInterface.songPosition = 0
+                    }
+                    MainActivity.playNextList.add(musicList[position])
+                    MusicInterface.musicList.addAll(0, MainActivity.playNextList)
+                    Snackbar.make(context, holder.root, "Added To Queue", 3000).show()
+                } catch (e: Exception) {
+                    Snackbar.make(context, holder.root, "Play A Song First!", 3000).show()
+                }
+                return@setOnLongClickListener true
+            }
+        }
         when {
             playlistDetails -> {
                 holder.root.setOnClickListener {
@@ -81,6 +99,7 @@ class MusicAdapter(
                     else
                         sendIntent(position = position, parameter = "MusicAdapter")
                 }
+
             }
         }
     }

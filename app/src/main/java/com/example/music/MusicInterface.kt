@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.database.Cursor
+import android.graphics.BitmapFactory
+import android.graphics.drawable.GradientDrawable
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
@@ -25,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.ActivityMusicInterfaceBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 
 class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
@@ -164,10 +167,13 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 eqIntent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
                 startActivityForResult(eqIntent, 3)
             } catch (e: Exception) {
-                val toast = Toast.makeText(
-                    this, "Equalizer feature not supported in your device", Toast.LENGTH_SHORT
-                )
-                toast.show()
+                Snackbar.make(
+                    this,
+                    it,
+                    "Equalizer feature not supported in your device",
+                    3000
+                ).show()
+
             }
         }
 
@@ -209,43 +215,28 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
             "favouriteAdapter" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(FavouriteActivity.favSongList)
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(FavouriteActivity.favSongList, shuffle = false)
             }
 
             "MusicAdapter" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(MainActivity.songList)
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(MainActivity.songList, shuffle = false)
             }
 
             "FavouriteShuffle" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(FavouriteActivity.favSongList)
-                musicList.shuffle()
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(FavouriteActivity.favSongList, shuffle = true)
             }
             "PlaylistDetailsAdapter" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist)
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(
+                    PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist,
+                    shuffle = false
+                )
             }
+
             "PlaylistDetailsShuffle" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist)
-                musicList.shuffle()
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(
+                    PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist,
+                    shuffle = true
+                )
             }
 
             "Now playing" -> {
@@ -256,11 +247,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             }
 
             "MusicAdapterSearch" -> {
-                startService()
-                musicList = ArrayList()
-                musicList.addAll(MainActivity.musicListSearch)
-                setLayout()
-                initSong()
+                initServiceAndPlaylist(MainActivity.musicListSearch, shuffle = false)
             }
         }
     }
@@ -283,6 +270,23 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
                 binding.interfaceLikeButton.setImageResource(R.drawable.heart)
             }
+
+            val img = getImageArt(musicList[songPosition].path)
+            val image = if (img != null) {
+                BitmapFactory.decodeByteArray(img, 0, img.size)
+            } else {
+                BitmapFactory.decodeResource(
+                    resources,
+                    R.drawable.image_as_cover
+                )
+            }
+            val bgColor = getMainColor(image)
+            val gradient = GradientDrawable(
+                GradientDrawable.Orientation.BOTTOM_TOP,
+                intArrayOf(0xFFFFFF, bgColor)
+            )
+            binding.root.background = gradient
+            window?.statusBarColor = bgColor
         } catch (e: Exception) {
             return
         }
@@ -482,5 +486,19 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             }.start()
             dialog.dismiss()
         }
+    }
+
+    private fun initServiceAndPlaylist(
+        playlist: ArrayList<MusicClass>,
+        shuffle: Boolean,
+        playNext: Boolean = false
+    ) {
+        val intent = Intent(this, MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
+        musicList = ArrayList()
+        musicList.addAll(playlist)
+        if (shuffle) musicList.shuffle()
+        setLayout()
     }
 }
