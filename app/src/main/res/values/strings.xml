@@ -38,4 +38,8 @@
     <string name="playpause">playPause</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="your_message_here">Message *</string>
+    <string name="email_address">Email (Optional)</string>
+    <string name="name1">Name *</string>
+    <string name="submit">Submit</string>
 </resources>

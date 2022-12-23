@@ -113,7 +113,7 @@ fun getMainColor(img: Bitmap): Int {
     val newImg = Bitmap.createScaledBitmap(img, 1, 1, true)
     val color = newImg.getPixel(0, 0)
     newImg.recycle()
-    return manipulateColor(color, 0.8.toFloat())
+    return manipulateColor(color, 0.5.toFloat())
 }
 
 

@@ -10,9 +10,10 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:theme="@style/Theme.Music.IconFillColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.Music.IconFillColor">
+
 
         <ImageButton
             android:id="@+id/backButton"
@@ -20,21 +21,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:background="@null"
-            android:paddingHorizontal="10dp"
             android:contentDescription="@string/albumName"
+            android:paddingHorizontal="10dp"
             android:paddingStart="15dp"
             android:src="@drawable/back"
             tools:ignore="DuplicateSpeakableTextCheck" />
-
-
-        <TextView
-            android:id="@+id/header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/bold"
-            android:text="@string/liked_songs"
-            android:textSize="26sp" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
@@ -46,6 +37,15 @@
             app:searchHintIcon="@null"
             app:searchIcon="@drawable/search_icon" />
 
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/bold"
+            android:maxLines="1"
+            android:text="@string/liked_songs"
+            android:textSize="26sp" />
 
     </androidx.appcompat.widget.Toolbar>
 

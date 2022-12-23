@@ -203,9 +203,16 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             if (!isRepeating) {
                 isRepeating = true
                 binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
+                binding.interfaceRepeat.setColorFilter(ContextCompat.getColor(this, R.color.green))
             } else {
                 isRepeating = false
                 binding.interfaceRepeat.setImageResource(R.drawable.repeat)
+                binding.interfaceRepeat.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.music_icon_tint
+                    )
+                )
             }
         }
 
@@ -213,24 +220,34 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             if (!isShuffling) {
                 isShuffling = true
                 binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
+                binding.interfaceShuffle.setColorFilter(ContextCompat.getColor(this, R.color.green))
+
             } else {
                 isShuffling = false
                 binding.interfaceShuffle.setImageResource(R.drawable.shuffle)
+                binding.interfaceShuffle.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.music_icon_tint
+                    )
+                )
             }
         }
-
-
     }
 
     private fun initActivity() {
         songPosition = intent.getIntExtra("index", 0)
         when (intent.getStringExtra("class")) {
-            "favouriteAdapter" -> {
-                initServiceAndPlaylist(FavouriteActivity.favSongList, shuffle = false)
-            }
-
             "MusicAdapter" -> {
                 initServiceAndPlaylist(MainActivity.songList, shuffle = false)
+            }
+
+            "FavAdapterSearch" -> {
+                initServiceAndPlaylist(FavouriteActivity.musicListSearch, shuffle = false)
+            }
+
+            "FavAdapter" -> {
+                initServiceAndPlaylist(FavouriteActivity.favSongList, shuffle = false)
             }
 
             "FavouriteShuffle" -> {
@@ -272,8 +289,14 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
             binding.interfaceSongName.text = musicList[songPosition].title
             binding.interfaceArtistName.text = musicList[songPosition].album
-            if (isRepeating) binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
-            if (isShuffling) binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
+            if (isRepeating) {
+                binding.interfaceRepeat.setImageResource(R.drawable.repeat_on)
+                binding.interfaceRepeat.setColorFilter(ContextCompat.getColor(this, R.color.green))
+            }
+            if (isShuffling) {
+                binding.interfaceShuffle.setColorFilter(ContextCompat.getColor(this, R.color.green))
+                binding.interfaceShuffle.setImageResource(R.drawable.shuffle_fill)
+            }
             if (isLiked) {
                 NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart_fill)
                 binding.interfaceLikeButton.setImageResource(R.drawable.heart_fill)

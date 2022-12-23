@@ -36,17 +36,6 @@
             android:text="@string/playlist"
             android:textSize="26sp" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginHorizontal="10dp"
-            app:defaultQueryHint="Search music"
-            app:searchHintIcon="@null"
-            app:searchIcon="@drawable/search_icon" />
-
-
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView

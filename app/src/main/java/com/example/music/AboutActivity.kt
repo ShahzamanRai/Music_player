@@ -3,6 +3,7 @@ package com.example.music
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.music.databinding.ActivityAboutBinding
 
@@ -26,6 +27,14 @@ class AboutActivity : AppCompatActivity() {
         }
         binding.instagram.setOnClickListener {
             openLinkPage("https://www.instagram.com/shahzaman_rai/")
+        }
+        binding.gmail.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:") // only email apps should handle this
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("srshahzaman444@gmail.com"))
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
         }
 
     }

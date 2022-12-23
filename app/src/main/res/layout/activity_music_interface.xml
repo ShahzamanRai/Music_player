@@ -15,7 +15,6 @@
         android:layout_marginEnd="15dp">
 
         <ImageButton
-            android:theme="@style/Theme.Music.IconFillColor"
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +24,8 @@
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/back"
-            tools:ignore="DuplicateSpeakableTextCheck" />
+            tools:ignore="DuplicateSpeakableTextCheck"
+            app:tint="@color/white" />
 
 
         <TextView
@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/now_playing"
+            android:textColor="@color/white"
             android:textSize="26sp" />
 
         <ImageButton
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="@null"
-            android:contentDescription="like"
+            android:contentDescription="@string/like"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/heart" />

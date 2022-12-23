@@ -275,7 +275,6 @@ class MainActivity : AppCompatActivity() {
             if (songList[index].length.toInt() < 45000) {
                 songList.removeAt(index)
             }
-            Log.d(TAG, "init: " + +songList[index].length)
         }
         if (songList[songList.size - 1].length < 45000) {
             songList.removeAt(songList.size - 1)

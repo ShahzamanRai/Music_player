@@ -4,17 +4,22 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/blue</item>
-        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/white</item>
         <item name="fontFamily">@font/medium</item>
         <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.Music.Font">
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/blue</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="Theme.Music.Font" parent="Theme.Music">
         <item name="background">@color/topWhite</item>
         <item name="android:textColor">@color/blue</item>
         <item name="android:fontFamily">@font/bold</item>
+        <item name="colorPrimaryDark">@color/blue</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -26,13 +31,17 @@
         <item name="tint">#CB0B0B0B</item>
     </style>
 
+    <style name="Theme.Music.IconFillColor1">
+        <item name="tint">@color/green</item>
+    </style>
+
 
     <style name="Theme.Music.FontColorDetails">
         <item name="android:textColor">@color/blue</item>
     </style>
 
     <style name="Theme.Music.playlist">
-        <item name="android:background">@color/bgPlay</item>
+        <item name="android:background">@color/orange</item>
         <item name="android:textColor">@color/blue</item>
         <item name="android:fontFamily">@font/bold</item>
         <item name="android:textSize">15sp</item>

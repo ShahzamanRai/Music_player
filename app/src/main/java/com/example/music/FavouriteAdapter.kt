@@ -10,7 +10,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.databinding.SingleLayoutBinding
 
-class FavouriteAdapter(private val context: Context, private var musicList: ArrayList<MusicClass>) :
+class FavouriteAdapter(
+    private val context: Context,
+    private var musicList: ArrayList<MusicClass>
+) :
     RecyclerView.Adapter<FavouriteAdapter.MyHolder>() {
 
     class MyHolder(binding: SingleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -41,14 +44,26 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
             .load(getImageArt(musicList[position].path))
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(holder.imageView)
-        holder.root.setOnClickListener {
-            val intent = Intent(context, MusicInterface::class.java)
-            intent.putExtra("index", position)
-            intent.putExtra("class", "favouriteAdapter")
-            ContextCompat.startActivity(context, intent, null)
+        holder.itemView.setOnClickListener {
+            if (MainActivity.isSearching)
+                sendIntent(position = position, parameter = "FavAdapterSearch")
+            else
+                sendIntent(position = position, parameter = "FavAdapter")
         }
     }
 
+    private fun sendIntent(position: Int, parameter: String) {
+        val intent = Intent(context, MusicInterface::class.java)
+        intent.putExtra("index", position)
+        intent.putExtra("class", parameter)
+        ContextCompat.startActivity(context, intent, null)
+    }
+
+    fun updateMusicList(searchList: ArrayList<MusicClass>) {
+        musicList = ArrayList()
+        musicList.addAll(searchList)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int {
         return musicList.size
