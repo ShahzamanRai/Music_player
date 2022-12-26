@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar
 
 
 class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
+    private lateinit var afChangeListener: AudioManager.OnAudioFocusChangeListener
 
     companion object {
         lateinit var musicList: ArrayList<MusicClass>
@@ -86,20 +87,17 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             if (!timer) showBottomSheetDialog()
             else {
                 val builder = MaterialAlertDialogBuilder(this)
-                builder.setTitle("Stop Timer")
-                    .setMessage("Do you want to stop timer?")
+                builder.setTitle("Stop Timer").setMessage("Do you want to stop timer?")
                     .setPositiveButton("Yes") { _, _ ->
                         min15 = false
                         min30 = false
                         min60 = false
                         binding.interfaceTimer.setColorFilter(
                             ContextCompat.getColor(
-                                this,
-                                R.color.bgTimer
+                                this, R.color.bgTimer
                             )
                         )
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
+                    }.setNegativeButton("No") { dialog, _ ->
                         dialog.dismiss()
                     }
                 val customDialog = builder.create()
@@ -166,17 +164,13 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 startActivityForResult(eqIntent, 3)
             } catch (e: Exception) {
                 Snackbar.make(
-                    this,
-                    it,
-                    "Equalizer feature not supported in your device",
-                    3000
+                    this, it, "Equalizer feature not supported in your device", 3000
                 ).show()
 
             }
         }
 
-        binding.root.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
-
+        binding.interfaceCover.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
             override fun onSingleClick() {
                 if (isPlaying) {
                     pauseMusic()
@@ -184,6 +178,22 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                     playMusic()
                 }
             }
+
+            override fun onSwipeDown() {
+                Log.d(ContentValues.TAG, "onSwipeDown: Performed")
+                finish()
+            }
+
+            override fun onSwipeLeft() {
+                prevNextSong(increment = true)
+            }
+
+            override fun onSwipeRight() {
+                prevNextSong(increment = false)
+            }
+        })
+
+        binding.root.setOnTouchListener(object : OnSwipeTouchListener(baseContext) {
 
             override fun onSwipeDown() {
                 Log.d(ContentValues.TAG, "onSwipeDown: Performed")
@@ -209,8 +219,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 binding.interfaceRepeat.setImageResource(R.drawable.repeat)
                 binding.interfaceRepeat.setColorFilter(
                     ContextCompat.getColor(
-                        this,
-                        R.color.music_icon_tint
+                        this, R.color.music_icon_tint
                     )
                 )
             }
@@ -227,8 +236,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 binding.interfaceShuffle.setImageResource(R.drawable.shuffle)
                 binding.interfaceShuffle.setColorFilter(
                     ContextCompat.getColor(
-                        this,
-                        R.color.music_icon_tint
+                        this, R.color.music_icon_tint
                     )
                 )
             }
@@ -310,14 +318,12 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 BitmapFactory.decodeByteArray(img, 0, img.size)
             } else {
                 BitmapFactory.decodeResource(
-                    resources,
-                    R.drawable.image_as_cover
+                    resources, R.drawable.image_as_cover
                 )
             }
             val bgColor = getMainColor(image)
             val gradient = GradientDrawable(
-                GradientDrawable.Orientation.BOTTOM_TOP,
-                intArrayOf(0xFFFFFF, bgColor)
+                GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0xFFFFFF, bgColor)
             )
             binding.root.background = gradient
             window?.statusBarColor = bgColor
@@ -350,6 +356,9 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     private fun playMusic() {
         try {
+            musicService!!.audioManager.requestAudioFocus(
+                musicService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+            )
             isPlaying = true
             musicService!!.mediaPlayer!!.start()
             binding.interfacePlay.setImageResource((R.drawable.pause))
@@ -362,6 +371,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     fun pauseMusic() {
         try {
+            musicService!!.audioManager.abandonAudioFocus(MusicInterface.musicService)
             isPlaying = false
             musicService!!.mediaPlayer!!.pause()
             binding.interfacePlay.setImageResource((R.drawable.play))
@@ -410,8 +420,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
         //for refreshing now playing image & text on song completion
         NowPlaying.binding.fragmentTitle.isSelected = true
-        Glide.with(applicationContext)
-            .load(getImageArt(musicList[songPosition].path))
+        Glide.with(applicationContext).load(getImageArt(musicList[songPosition].path))
             .apply(RequestOptions().placeholder(R.drawable.image_as_cover).centerCrop())
             .into(NowPlaying.binding.fragmentImage)
         NowPlaying.binding.fragmentTitle.text = musicList[songPosition].title
@@ -517,8 +526,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
     }
 
     private fun initServiceAndPlaylist(
-        playlist: ArrayList<MusicClass>,
-        shuffle: Boolean
+        playlist: ArrayList<MusicClass>, shuffle: Boolean
     ) {
         val intent = Intent(this, MusicService::class.java)
         bindService(intent, this, BIND_AUTO_CREATE)

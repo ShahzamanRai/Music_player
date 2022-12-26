@@ -19,27 +19,32 @@ class FeedbackActivity : AppCompatActivity() {
             finish()
         }
         binding.submitButton.setOnClickListener {
-            try {
+            val isNotEmpty =
+                binding.nameFeedback.text?.isNotEmpty() == true && binding.messageFeedback.text?.isNotEmpty() == true
+            if (isNotEmpty) {
+                try {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data = Uri.parse("mailto:") // only email apps should handle this
+                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("srshahzaman444@gmail.com"))
+                    intent.putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        "Feedback from " + binding.nameFeedback.text.toString()
+                    )
+                    intent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Dear Shahzaman, " + binding.messageFeedback.text.toString()
+                    )
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }
+                    Toast.makeText(this, "Thanks for Feedback", Toast.LENGTH_SHORT).show()
+                    finish()
 
-                val intent = Intent(Intent.ACTION_SENDTO)
-                intent.data = Uri.parse("mailto:") // only email apps should handle this
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("srshahzaman444@gmail.com"))
-                intent.putExtra(
-                    Intent.EXTRA_SUBJECT,
-                    "Feedback from " + binding.nameFeedback.text.toString()
-                )
-                intent.putExtra(
-                    Intent.EXTRA_TEXT,
-                    "Dear Shahzaman, " + binding.messageFeedback.text.toString()
-                )
-                if (intent.resolveActivity(packageManager) != null) {
-                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show()
                 }
-                Toast.makeText(this, "Thanks for Feedback", Toast.LENGTH_SHORT).show()
-                finish()
-
-            } catch (e: Exception) {
-                Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Fields can't be empty", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -3,6 +3,7 @@ package com.example.music
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -94,6 +95,9 @@ class NowPlaying : Fragment() {
     }
 
     private fun playMusic() {
+        MusicInterface.musicService!!.audioManager.requestAudioFocus(
+            MusicInterface.musicService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+        )
         MusicInterface.isPlaying = true
         binding.fragmentButton.setImageResource(R.drawable.pause_now)
         MusicInterface.musicService!!.showNotification(R.drawable.pause_notification)
@@ -103,6 +107,7 @@ class NowPlaying : Fragment() {
     }
 
     private fun pauseMusic() {
+        MusicInterface.musicService!!.audioManager.abandonAudioFocus(MusicInterface.musicService)
         MusicInterface.isPlaying = false
         MusicInterface.musicService!!.mediaPlayer!!.pause()
         MusicInterface.musicService!!.showNotification(R.drawable.play_notification)

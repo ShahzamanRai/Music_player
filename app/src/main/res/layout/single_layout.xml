@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="9dp"
-    android:theme="@style/Theme.Music.Font">
+    android:theme="@style/Theme.Music.Single">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView"

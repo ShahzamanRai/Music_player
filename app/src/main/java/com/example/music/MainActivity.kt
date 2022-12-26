@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             SSPullToRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(2000)
+                    delay(1500)
                     songList = getAudio()
                     repeat(songList.size - 1) { index ->
                         if (songList[index].length.toInt() < 45000) {

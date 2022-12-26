@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/Theme.Music.Font"
+    android:theme="@style/Theme.Music.FontInterface"
     tools:context=".MusicInterface">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -48,8 +48,7 @@
             android:src="@drawable/heart" />
 
 
-    </androidx.appcompat.widget.Toolbar>
-
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/interfaceCover"

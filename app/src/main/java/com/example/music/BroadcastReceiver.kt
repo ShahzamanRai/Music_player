@@ -3,6 +3,7 @@ package com.example.music
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -28,6 +29,9 @@ class BroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun playMusic() {
+        MusicInterface.musicService!!.audioManager.requestAudioFocus(
+            MusicInterface.musicService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN
+        )
         MusicInterface.isPlaying = true
         MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
         MusicInterface.musicService!!.mediaPlayer!!.start()
@@ -75,6 +79,7 @@ class BroadcastReceiver : BroadcastReceiver() {
     }
 
     private fun pauseMusic() {
+        MusicInterface.musicService!!.audioManager.abandonAudioFocus(MusicInterface.musicService)
         MusicInterface.isPlaying = false
         MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
         MusicInterface.musicService!!.mediaPlayer!!.pause()

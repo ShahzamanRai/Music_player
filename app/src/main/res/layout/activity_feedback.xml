@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
-    android:theme="@style/Theme.Music"
+    android:theme="@style/Theme.Music.Font"
     tools:context=".FeedbackActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -118,6 +117,6 @@
         android:text="@string/submit"
         android:textColor="@color/onGreen"
         android:textSize="16sp"
-        app:backgroundTint="@color/green" />
+        app:backgroundTint="#0c5a27" />
 
 </RelativeLayout>

@@ -2,15 +2,17 @@
 <resources>
 
     <color name="black">#121212</color>
-    <color name="white">#DADBE1</color>
+    <color name="onBlack">#e6e6e6</color>
+    <color name="white">#c7c8d1</color>
+    <color name="onWhite">#2e2f38</color>
     <color name="topWhite">#D0CCCC</color>
+    <color name="surfaceColor">#E6E2D9</color>
     <color name="blue">#0b0b0b</color>
-    <color name="green">#0c5a27</color>
+    <color name="green">#1ED760</color>
     <color name="onGreen">#a5f3c0</color>
     <color name="lightBlue">#CC333B5A</color>
     <color name="fragmentBG">#444444</color>
     <color name="darkGrey">#2A2A2A</color>
-    <color name="bgPlay">#F2E7D5</color>
     <color name="bgTimer">#0b0b0b</color>
     <color name="searchBG">#0b0b0b</color>
     <color name="selectedBG">#BC00F15E</color>
@@ -18,5 +20,4 @@
     <color name="splash_screen_background">#DADBE1</color>
     <color name="music_icon_tint">#121212</color>
     <color name="orange">#a0cffc</color>
-    <color name="shimmerBackground">#dddddd</color>
 </resources>
