@@ -143,15 +143,7 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(1500)
                     songList = getAudio()
-                    repeat(songList.size - 1) { index ->
-                        if (songList[index].length.toInt() < 45000) {
-                            songList.removeAt(index)
-                        }
-                        Log.d(TAG, "init: " + +songList[index].length)
-                    }
-                    if (songList[songList.size - 1].length < 45000) {
-                        songList.removeAt(songList.size - 1)
-                    }
+
                     musicAdapter.updateMusicList(songList)
                     binding.refreshLayout.setRefreshing(false) // This stops refreshing
                 }
@@ -271,14 +263,8 @@ class MainActivity : AppCompatActivity() {
         sortOrder = sortEditor.getInt("sortOrder", 0)
         songList = getAudio()
         recyclerView = binding.listView
-        repeat(songList.size - 1) { index ->
-            if (songList[index].length.toInt() < 45000) {
-                songList.removeAt(index)
-            }
-        }
-        if (songList[songList.size - 1].length < 45000) {
-            songList.removeAt(songList.size - 1)
-        }
+
+
         musicAdapter = MusicAdapter(this, songList)
         recyclerView.adapter = musicAdapter
         recyclerView.setItemViewCacheSize(50)

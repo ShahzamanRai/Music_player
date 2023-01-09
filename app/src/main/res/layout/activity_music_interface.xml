@@ -24,8 +24,8 @@
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/back"
-            tools:ignore="DuplicateSpeakableTextCheck"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
 
         <TextView
