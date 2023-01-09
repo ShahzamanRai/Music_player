@@ -5,7 +5,10 @@ Try it:<br />
 https://github.com/ShahzamanRai/Music_player/releases/download/MusicBeats/MusicBeatsV1.0.apk
 
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/Screen1.png" width="628"/>
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/S1.png" width="628"/>
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/Screen2.png" width="628"/>
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/S1.png" width="628"/>
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/S3.png" width="628"/>
 
 Features:
 * Both Dark and Light Theme 📎
