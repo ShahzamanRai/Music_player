@@ -7,9 +7,10 @@ Music Player Application by using kotlin XML and dependencies developed by Shahz
 https://github.com/ShahzamanRai/Music_player/releases/download/MusicBeats/MusicBeatsV1.0.apk
 
 # Screenshots
-<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppMain.png" width="475" align="left"/> <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlayer.png" width="475" align="right"/>
-
-<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylists.png" width="475" align="left"/> <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylistsDetails.png" width="475" align="right"/>
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppMain.png" width="650"/> 
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlayer.png" width="650"/>
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylists.png" width="650"/> 
+<img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylistsDetails.png" width="650"/>
 <br />
 # Features:
 * Both Dark and Light Theme 📎
