@@ -11,7 +11,7 @@ https://github.com/ShahzamanRai/Music_player/releases/download/MusicBeats/MusicB
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlayer.png" width="650"/>
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylists.png" width="650"/> 
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylistsDetails.png" width="650"/>
-<br />
+
 # Features:
 * Both Dark and Light Theme 📎
 * Custom Color Gradient According To Each Song Image 🌈
