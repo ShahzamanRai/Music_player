@@ -3,7 +3,6 @@ package com.example.music
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +44,7 @@ class MusicAdapter(
         holder.titleView.text = musicList[position].title
         holder.albumName.text = musicList[position].artist
         holder.duration.text = formatDuration(musicList[position].length)
+
         val myOptions = RequestOptions()
             .centerCrop()
             .override(100, 100)
@@ -59,15 +59,14 @@ class MusicAdapter(
         if (!selectionActivity) {
             holder.root.setOnLongClickListener {
                 try {
-                    if (MainActivity.playNextList.isEmpty()) {
-                        MainActivity.playNextList.add(MusicInterface.musicList[MusicInterface.songPosition])
-                        MusicInterface.songPosition = 0
-                    }
-                    MainActivity.playNextList.add(musicList[position])
-                    MusicInterface.musicList.addAll(0, MainActivity.playNextList)
-                    Snackbar.make(context, holder.root, "Added To Queue", 3000).show()
+                    MusicInterface.musicList.add(
+                        index = MusicInterface.songPosition + MusicInterface.counter + 1,
+                        element = musicList[position]
+                    )
+                    MusicInterface.counter++
+                    Snackbar.make(context, holder.root, "Added To Queue", 2000).show()
                 } catch (e: Exception) {
-                    Snackbar.make(context, holder.root, "Play A Song First!", 3000).show()
+                    Snackbar.make(context, holder.root, "Play A Song First!", 2000).show()
                 }
                 return@setOnLongClickListener true
             }

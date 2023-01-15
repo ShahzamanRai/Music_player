@@ -21,6 +21,7 @@ class BroadcastReceiver : BroadcastReceiver() {
 
             ApplicationClass.NEXT -> {
                 prevNextMusic(increment = true, context = context!!)
+                MusicInterface.counter--
             }
             ApplicationClass.EXIT -> {
                 exitApplicationNotification()
@@ -73,6 +74,7 @@ class BroadcastReceiver : BroadcastReceiver() {
                 MusicInterface.binding.interfaceLikeButton.setImageResource(R.drawable.heart)
                 NowPlaying.binding.fragmentHeartButton.setImageResource(R.drawable.heart)
             }
+
         } catch (e: Exception) {
             Log.e("AdapterView", e.toString())
         }

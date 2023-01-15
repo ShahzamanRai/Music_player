@@ -124,46 +124,55 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                     mediaPlayer!!.currentPosition.toLong(),
                     playbackSpeed
                 )
-                .setActions(PlaybackStateCompat.ACTION_SEEK_TO)
+                .setActions(
+                    PlaybackStateCompat.ACTION_SEEK_TO
+                            or PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                            or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                            or PlaybackStateCompat.ACTION_PLAY_PAUSE
+                )
                 .build()
             mediaSession.setPlaybackState(playBackState)
+            mediaSession.isActive = true
             mediaSession.setCallback(object : MediaSessionCompat.Callback() {
 
-                override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-                    val intentAction: String = mediaButtonEvent!!.action!!
-                    if (Intent.ACTION_MEDIA_BUTTON == intentAction) {
-                        val event: KeyEvent =
-                            mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)!!
-                        val keyCode: Int = event.keyCode
-                        val action: Int = event.action
-                        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
-                            if (MusicInterface.isPlaying) {
-                                //pause music
-                                MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
-                                MusicInterface.isPlaying = false
-                                mediaPlayer!!.pause()
-                                showNotification(R.drawable.play_notification)
-                                NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
-                            } else {
-                                //play music
-                                MusicInterface.binding.interfacePlay.setImageResource(R.drawable.pause)
-                                MusicInterface.isPlaying = true
-                                mediaPlayer!!.start()
-                                showNotification(R.drawable.pause_notification)
-                                NowPlaying.binding.fragmentButton.setImageResource(R.drawable.pause_now)
+                override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
+                    val event =
+                        mediaButtonEvent.getParcelableExtra<KeyEvent>(Intent.EXTRA_KEY_EVENT)
+                    if (event != null) {
+                        if (event.action == KeyEvent.ACTION_DOWN) {
+                            when (event.keyCode) {
+                                KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+                                    if (mediaPlayer != null) {
+                                        if (MusicInterface.isPlaying) {
+                                            //pause music
+                                            MusicInterface.binding.interfacePlay.setImageResource(R.drawable.play)
+                                            MusicInterface.isPlaying = false
+                                            mediaPlayer!!.pause()
+                                            showNotification(R.drawable.play_notification)
+                                            NowPlaying.binding.fragmentButton.setImageResource(R.drawable.play_now)
+                                        } else {
+                                            //play music
+                                            MusicInterface.binding.interfacePlay.setImageResource(
+                                                R.drawable.pause
+                                            )
+                                            MusicInterface.isPlaying = true
+                                            mediaPlayer!!.start()
+                                            showNotification(R.drawable.pause_notification)
+                                            NowPlaying.binding.fragmentButton.setImageResource(
+                                                R.drawable.pause_now
+                                            )
 
+                                        }
+                                    }
+                                }
+                                KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                                    broadcastReceiver.prevNextMusic(increment = true, baseContext)
+                                    MusicInterface.counter--
+                                }
+                                KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+                                    broadcastReceiver.prevNextMusic(increment = false, baseContext)
+                                }
                             }
-
-                            return true
-                        }
-
-                        if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
-                            broadcastReceiver.prevNextMusic(increment = true, baseContext)
-                            return true
-                        }
-
-                        if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
-                            broadcastReceiver.prevNextMusic(increment = false, baseContext)
                             return true
                         }
                     }
@@ -239,4 +248,5 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
         }
 
     }
+
 }

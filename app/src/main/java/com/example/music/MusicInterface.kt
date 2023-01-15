@@ -37,6 +37,10 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         var isPlaying: Boolean = false
         var isRepeating: Boolean = false
         var isShuffling: Boolean = false
+        var counter: Int = 0
+            set(value) {
+                field = kotlin.math.max(value, 0)
+            }
         var fIndex: Int = -1
         var isLiked: Boolean = false
         var min15: Boolean = false
@@ -387,6 +391,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             setSongPosition(increment = true)
             setLayout()
             initSong()
+            counter--
         } else {
             setSongPosition(increment = false)
             setLayout()
@@ -417,6 +422,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
         setSongPosition(increment = true)
         setLayout()
         initSong()
+        counter--
 
         //for refreshing now playing image & text on song completion
         NowPlaying.binding.fragmentTitle.isSelected = true
@@ -523,6 +529,17 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             }.start()
             dialog.dismiss()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0, com.google.android.material.R.anim.mtrl_bottom_sheet_slide_out)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(com.google.android.material.R.anim.mtrl_bottom_sheet_slide_in, 0)
+
     }
 
     private fun initServiceAndPlaylist(
