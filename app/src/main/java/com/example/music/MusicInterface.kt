@@ -168,7 +168,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
                 startActivityForResult(eqIntent, 3)
             } catch (e: Exception) {
                 Snackbar.make(
-                    this, it, "Equalizer feature not supported in your device", 3000
+                    this, it, "Equalizer feature not supported in your device.", 3000
                 ).show()
 
             }
