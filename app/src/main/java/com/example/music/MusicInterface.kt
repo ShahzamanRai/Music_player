@@ -542,7 +542,14 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     }
 
-    private fun initServiceAndPlaylist(
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null){
+            showMusicInterfacePlaying()
+        }
+    }
+
+    fun initServiceAndPlaylist(
         playlist: ArrayList<MusicClass>, shuffle: Boolean
     ) {
         val intent = Intent(this, MusicService::class.java)
