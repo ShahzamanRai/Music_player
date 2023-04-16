@@ -47,6 +47,13 @@
                     android:contentDescription="@string/sort"
                     android:src="@drawable/sort" />
 
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/themeToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="@string/toggle_theme" />
+
             </com.google.android.material.appbar.MaterialToolbar>
 
             <LinearLayout

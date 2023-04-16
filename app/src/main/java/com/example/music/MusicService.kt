@@ -22,16 +22,13 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private lateinit var runnable: Runnable
     lateinit var audioManager: AudioManager
     val broadcastReceiver: BroadcastReceiver = BroadcastReceiver()
-
     companion object {
         lateinit var playPendingIntent: PendingIntent
     }
-
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "Music")
         return myBinder
     }
-
     inner class MyBinder : Binder() {
         fun currentService(): MusicService {
             return this@MusicService
