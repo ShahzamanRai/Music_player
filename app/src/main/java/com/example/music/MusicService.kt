@@ -54,28 +54,28 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
         val prevIntent =
             Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.PREVIOUS)
         val prevPendingIntent = PendingIntent.getBroadcast(
-            baseContext, 3, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            baseContext, 3, prevIntent, flag
 
         )
 
         val playIntent =
             Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.PLAY)
         playPendingIntent = PendingIntent.getBroadcast(
-            baseContext, 3, playIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            baseContext, 3, playIntent, flag
 
         )
 
         val nextIntent =
             Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.NEXT)
         val nextPendingIntent = PendingIntent.getBroadcast(
-            baseContext, 3, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            baseContext, 3, nextIntent, flag
 
         )
 
         val exitIntent =
             Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.EXIT)
         val exitPendingIntent = PendingIntent.getBroadcast(
-            baseContext, 3, exitIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            baseContext, 3, exitIntent, flag
 
         )
 

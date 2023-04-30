@@ -88,14 +88,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.themeToggle.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
