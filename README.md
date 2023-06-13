@@ -5,7 +5,7 @@ Music Player Application by using kotlin XML and dependencies developed by Shahz
 
 # Try it
 [Click here to download
-](https://github.com/ShahzamanRai/Music_player/releases/download/2/MusicBeats.V2.apk)
+](https://github.com/ShahzamanRai/Music_player/releases/download/2/Music.Beats.V2.0.apk)
 
 # Screenshots
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppMain.png" width="650"/> 
