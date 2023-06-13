@@ -1,11 +1,14 @@
 package com.example.music
 
+import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
+import kotlin.random.Random
 import kotlin.system.exitProcess
 
 
@@ -30,6 +33,7 @@ class MusicPlaylist {
     var ref: ArrayList<Playlist> = ArrayList()
 }
 
+val usedNumber = mutableSetOf<Int>()
 
 fun formatDuration(duration: Long): String {
     val minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
@@ -75,8 +79,10 @@ fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
 fun setSongPosition(increment: Boolean) {
     if (!MusicInterface.isRepeating) {
         if (increment) {
-            if (MusicInterface.isShuffling) {
-                shuffleSongs()
+            if (MusicInterface.counter == 0) {
+                if (MusicInterface.isShuffling) {
+                    shuffleSongs()
+                }
             } else {
                 if (MusicInterface.musicList.size - 1 == MusicInterface.songPosition) {
                     MusicInterface.songPosition = 0
@@ -87,15 +93,36 @@ fun setSongPosition(increment: Boolean) {
                 MusicInterface.musicList.size - 1
             else --MusicInterface.songPosition
         }
+
+    }
+}
+
+fun checkIfListIsFull(list: MutableSet<Int>) {
+    if (list.size.toInt() == MusicInterface.musicList.size) {
+        list.clear()
     }
 }
 
 fun shuffleSongs() {
     var newSong: Int = MusicInterface.songPosition
+    checkIfListIsFull(usedNumber)
+    Log.d(TAG, "shuffleSongs: " + usedNumber.size)
     while (newSong == MusicInterface.songPosition) {
-        newSong = kotlin.random.Random.nextInt(MusicInterface.musicList.size)
+        newSong = getRandomNumber(MusicInterface.musicList.size)
     }
     MusicInterface.songPosition = newSong
+}
+
+fun getRandomNumber(max: Int): Int {
+    val random = Random
+    var number = random.nextInt(max + 1)
+
+    while (usedNumber.contains(number)) {
+        number = random.nextInt(max + 1)
+    }
+
+    usedNumber.add(number)
+    return number
 }
 
 fun favouriteCheck(id: String): Int {

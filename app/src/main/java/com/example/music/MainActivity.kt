@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, AboutActivity::class.java))
                 }
                 R.id.navExit -> {
+
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit")
                         .setMessage("Do you want to close app?")
