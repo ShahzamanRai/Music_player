@@ -79,10 +79,8 @@ fun checkPlaylist(playlist: ArrayList<MusicClass>): ArrayList<MusicClass> {
 fun setSongPosition(increment: Boolean) {
     if (!MusicInterface.isRepeating) {
         if (increment) {
-            if (MusicInterface.counter == 0) {
-                if (MusicInterface.isShuffling) {
-                    shuffleSongs()
-                }
+            if (MusicInterface.isShuffling && MusicInterface.counter == 0) {
+                shuffleSongs()
             } else {
                 if (MusicInterface.musicList.size - 1 == MusicInterface.songPosition) {
                     MusicInterface.songPosition = 0
@@ -93,7 +91,6 @@ fun setSongPosition(increment: Boolean) {
                 MusicInterface.musicList.size - 1
             else --MusicInterface.songPosition
         }
-
     }
 }
 
