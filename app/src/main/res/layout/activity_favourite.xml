@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.Music.Font"
-    tools:context=".FavouriteActivity">
+    tools:context=".activities.FavouriteActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

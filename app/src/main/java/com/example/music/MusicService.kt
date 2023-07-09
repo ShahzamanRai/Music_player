@@ -13,6 +13,9 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.KeyEvent
 import androidx.core.app.NotificationCompat
+import com.example.music.activities.MusicInterface
+import com.example.music.utils.ApplicationClass
+import com.example.music.utils.NowPlaying
 
 class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
@@ -21,7 +24,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
     private lateinit var mediaSession: MediaSessionCompat
     private lateinit var runnable: Runnable
     lateinit var audioManager: AudioManager
-    val broadcastReceiver: BroadcastReceiver = BroadcastReceiver()
+    val broadcastReceiver: MyBroadcastReceiver = MyBroadcastReceiver()
     companion object {
         lateinit var playPendingIntent: PendingIntent
     }
@@ -52,28 +55,28 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
         val contentIntent = PendingIntent.getActivity(this, 0, intent, flag)
 
         val prevIntent =
-            Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.PREVIOUS)
+            Intent(baseContext, MyBroadcastReceiver::class.java).setAction(ApplicationClass.PREVIOUS)
         val prevPendingIntent = PendingIntent.getBroadcast(
             baseContext, 3, prevIntent, flag
 
         )
 
         val playIntent =
-            Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.PLAY)
+            Intent(baseContext, MyBroadcastReceiver::class.java).setAction(ApplicationClass.PLAY)
         playPendingIntent = PendingIntent.getBroadcast(
             baseContext, 3, playIntent, flag
 
         )
 
         val nextIntent =
-            Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.NEXT)
+            Intent(baseContext, MyBroadcastReceiver::class.java).setAction(ApplicationClass.NEXT)
         val nextPendingIntent = PendingIntent.getBroadcast(
             baseContext, 3, nextIntent, flag
 
         )
 
         val exitIntent =
-            Intent(baseContext, BroadcastReceiver::class.java).setAction(ApplicationClass.EXIT)
+            Intent(baseContext, MyBroadcastReceiver::class.java).setAction(ApplicationClass.EXIT)
         val exitPendingIntent = PendingIntent.getBroadcast(
             baseContext, 3, exitIntent, flag
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:theme="@style/Theme.Music.Font"
-    tools:context=".FeedbackActivity">
+    tools:context=".activities.FeedbackActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

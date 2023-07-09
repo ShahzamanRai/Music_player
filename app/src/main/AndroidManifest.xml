@@ -2,11 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:name=".ApplicationClass"
+        android:name=".utils.ApplicationClass"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,64 +23,57 @@
         android:theme="@style/Theme.Music.Splash"
         tools:targetApi="31">
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FeedbackActivity"
+            android:name=".activities.FeedbackActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".SelectionActivity"
+            android:name=".activities.SelectionActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PlaylistActivityDetails"
+            android:name=".activities.PlaylistActivityDetails"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PlaylistActivity"
+            android:name=".activities.PlaylistActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FavouriteActivity"
+            android:name=".activities.FavouriteActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MusicInterface"
+            android:name=".activities.MusicInterface"
             android:exported="true"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -88,10 +86,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,8 +109,10 @@
         </service>
 
         <receiver
-            android:name=".BroadcastReceiver"
-            android:enabled="true" />
+            android:name=".MyBroadcastReceiver"
+            android:enabled="true">
+
+        </receiver>
     </application>
 
 </manifest>

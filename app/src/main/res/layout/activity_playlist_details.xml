@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.Music.Font"
-    tools:context=".PlaylistActivityDetails">
+    tools:context=".activities.PlaylistActivityDetails">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

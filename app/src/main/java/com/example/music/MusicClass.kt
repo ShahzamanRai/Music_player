@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaMetadataRetriever
 import android.util.Log
+import com.example.music.activities.FavouriteActivity
+import com.example.music.activities.MusicInterface
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt

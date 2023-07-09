@@ -96,7 +96,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/nowPlaying"
-                android:name="com.example.music.NowPlaying"
+                android:name="com.example.music.utils.NowPlaying"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
