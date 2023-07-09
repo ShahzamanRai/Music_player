@@ -3,9 +3,11 @@
 # Music Beats
 Music Player Application by using kotlin XML and dependencies developed by Shahzaman Rai.
 
+This music player is intended solely for educational purposes and for learning purposes. I do not recommend anyone to actively engage in listening to music.
+
 # Try it
 [Click here to download
-](https://github.com/ShahzamanRai/Music_player/releases/download/2/MusicBeats.V2.apk)
+](https://github.com/ShahzamanRai/Music_player/releases/download/2/Music.Beats.V2.0.apk)
 
 # Screenshots
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppMain.png" width="650"/> 
@@ -14,7 +16,7 @@ Music Player Application by using kotlin XML and dependencies developed by Shahz
 <img src="https://github.com/ShahzamanRai/Music_player/blob/master/screenshots/MusicAppPlaylistsDetails.png" width="650"/>
 
 # Features:
-* Both Dark and Light Theme 📎
+* Both Dark and Light Themes 📎
 * Custom Color Gradient According To Each Song Image 🌈
 * Favourite Songs ✨
 * Create & Add Playlists 🎗️
