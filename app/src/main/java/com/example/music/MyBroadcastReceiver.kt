@@ -6,7 +6,6 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
-import android.provider.Settings
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -34,16 +33,17 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             ApplicationClass.EXIT -> {
                 exitApplicationNotification()
             }
+            /*
+                        AudioManager.ACTION_HEADSET_PLUG -> {
+                            val state = intent.getIntExtra("state", -1)
+                            if (state == 0) {
+                                pauseMusic()
+                            } else{
+                                Log.d(TAG, "onReceive: HeadSet Plugged")
+                            }
+                        }
 
-            AudioManager.ACTION_HEADSET_PLUG -> {
-                val state = intent.getIntExtra("state", -1)
-                if (state == 0) {
-                    // Headset is unplugged
-                    pauseMusic()
-                }
-            }
-
-
+             */
 
             BluetoothAdapter.ACTION_STATE_CHANGED -> {
                 val state =

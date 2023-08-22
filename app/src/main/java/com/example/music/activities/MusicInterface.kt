@@ -5,6 +5,8 @@ import android.content.*
 import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.drawable.GradientDrawable
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
@@ -24,8 +26,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.music.MusicClass
 import com.example.music.MusicService
-import com.example.music.utils.NowPlaying
-import com.example.music.utils.OnSwipeTouchListener
 import com.example.music.R
 import com.example.music.databinding.ActivityMusicInterfaceBinding
 import com.example.music.exitApplication
@@ -34,10 +34,11 @@ import com.example.music.formatDuration
 import com.example.music.getImageArt
 import com.example.music.getMainColor
 import com.example.music.setSongPosition
+import com.example.music.utils.NowPlaying
+import com.example.music.utils.OnSwipeTouchListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-
 
 class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
     private lateinit var afChangeListener: AudioManager.OnAudioFocusChangeListener
@@ -276,6 +277,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             "FavouriteShuffle" -> {
                 initServiceAndPlaylist(FavouriteActivity.favSongList, shuffle = true)
             }
+
             "PlaylistDetailsAdapter" -> {
                 initServiceAndPlaylist(
                     PlaylistActivity.musicPlaylist.ref[PlaylistActivityDetails.currentPlaylistPos].playlist,
@@ -293,6 +295,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             "Now playing" -> {
                 showMusicInterfacePlaying()
             }
+
             "Now Playing Notification" -> {
                 showMusicInterfacePlaying()
             }
@@ -555,7 +558,7 @@ class MusicInterface : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent != null){
+        if (intent != null) {
             showMusicInterfacePlaying()
         }
     }
